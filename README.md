@@ -3,7 +3,8 @@
 Voice-first Telugu/Hindi AI copilot that helps people understand notices and forms, spot scams, and know
 exactly what to fill and bring. Prepare-only: it never submits anything for you.
 
-> Status: **M0 — repo skeleton.** App and API boot; no pipeline yet. See `/docs/MILESTONES.md`.
+> Status: **M1 — app shell.** Language select, consent, Home, camera/gallery/PDF pick, sample notices.
+> Extraction (Gemini) starts in M2. See `/docs/MILESTONES.md`.
 > `docs/PRD.md` is still a placeholder — the exported PRD needs to be added.
 
 ## Quickstart

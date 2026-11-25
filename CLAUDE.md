@@ -1,6 +1,6 @@
 # CLAUDE.md — Saaradhi (read this every session)
 
-**Status: M0 (repo skeleton).** Update this line every milestone. Until `docs/PRD.md` is exported, the
+**Status: M1 (app shell).** Update this line every milestone. Until `docs/PRD.md` is exported, the
 spec is `docs/MILESTONES.md` + `supabase/schema.sql` + `data/*`.
 
 ## What we're building
