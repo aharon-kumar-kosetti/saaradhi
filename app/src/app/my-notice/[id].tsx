@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { ActivityIndicator, Alert, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { ExplanationCard } from '@/components/explanation-card';
 import { PrimaryButton } from '@/components/primary-button';
 import { ScamBadge } from '@/components/scam-badge';
 import { Colors, Radius, Spacing, Type } from '@/constants/tokens';
@@ -205,6 +206,8 @@ export default function MyNoticeScreen() {
             ))}
           </View>
         ) : null}
+
+        <ExplanationCard fields={fields} />
 
         <PrimaryButton
           label={checking ? t('scam.checking') : t('scam.check')}

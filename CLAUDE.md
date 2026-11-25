@@ -1,6 +1,6 @@
 # CLAUDE.md — Saaradhi (read this every session)
 
-**Status: M3 (scam checker).** Update this line every milestone. Until `docs/PRD.md` is exported, the
+**Status: M4 (explanation + KB).** Update this line every milestone. Until `docs/PRD.md` is exported, the
 spec is `docs/MILESTONES.md` + `supabase/schema.sql` + `data/*`.
 
 ## What we're building

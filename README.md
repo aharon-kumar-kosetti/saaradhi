@@ -3,8 +3,8 @@
 Voice-first Telugu/Hindi AI copilot that helps people understand notices and forms, spot scams, and know
 exactly what to fill and bring. Prepare-only: it never submits anything for you.
 
-> Status: **M3 — scam checker.** Photo/PDF/text -> JSON fields -> Confirm -> saved on the phone, with a
-> Safe/Suspicious/Dangerous/Unsure verdict and plain-language reasons.
+> Status: **M4 — explanation + knowledge base.** Photo/PDF/text -> fields -> Confirm -> scam verdict ->
+> cited what-to-do guidance with Read aloud, and a reviewer request when the KB has no answer.
 > See `/docs/MILESTONES.md`. `docs/PRD.md` is still a placeholder — the exported PRD needs to be added.
 
 ## Quickstart
@@ -111,6 +111,36 @@ Known gaps, stated plainly:
 - QR codes are recognised from notice text (QR + payment words) or from Gemini's `risk_signals` flag.
   There is no camera QR scanning.
 - Scores are rule weights, not calibrated probabilities.
+
+## Explanation + knowledge base (M4)
+
+| Endpoint | Purpose |
+|---|---|
+| `GET /explain/status` | corpus size, verified sources, backend in use |
+| `POST /explain` | `{fields, language}` -> advice codes, citations, helpline, `no_answer` |
+| `POST /review` | consent-gated review request; refuses without `consent: true` |
+
+**Retrieval** is hybrid, mirroring `match_kb_chunks` from `supabase/schema.sql`: IDF-weighted lexical
+overlap (0.6) plus cosine over deterministic hashed 768-dim vectors (0.4). Below **0.18** the answer is
+`no_answer` — the service says it does not know instead of stretching a weak match.
+
+**No pgvector yet.** There is no Supabase project or credentials in this repo, so `kb_chunks` is not in
+use; chunks load from `/kb/chunks/*.json` through `kb.store.ts`. Swapping in Supabase means one adapter
+behind the same `Retriever` interface — the ranking code does not change.
+
+**Answers contain no free text.** The API returns a closed set of 10 advice codes plus citations; the app
+translates them (te/hi/en) and reads them aloud. That keeps invented fees, deadlines and penalties
+structurally impossible. Citations carry `last_verified`, and the seeded corpus is `placeholder: true`
+with `last_verified: null`, so every answer is labelled "not checked against an official source yet".
+
+**No answer path:** when retrieval is weak, the screen says so, shows the helpline, and offers
+"Ask a person to check this". The registry ships `helpline: "TODO"`, so until you fill those in the app
+says no number is recorded rather than inventing one. The request sends department, category and notice
+type only — never the notice or the user's details — and is written to `api/.data/review-queue.json`
+(gitignored). That is a stand-in for the Supabase `review_queue` table, not the real queue.
+
+**Read aloud** uses `expo-speech` with `te-IN` / `hi-IN` / `en-IN`. There is no Sarvam integration yet,
+and a phone without a Telugu or Hindi TTS voice will not speak those languages.
 
 ## README outline (fill as you build)
 1. Pitch (one paragraph) + demo GIF/video

@@ -1,0 +1,36 @@
+{
+  "source": {
+    "id": "apspdcl_billing_guide",
+    "department": "APSPDCL",
+    "title": "Electricity bill payment and disconnection guidance",
+    "url": null,
+    "language": "en",
+    "last_verified": null,
+    "placeholder": true
+  },
+  "chunks": [
+    {
+      "id": "eb-payment-channels",
+      "content": "An electricity bill notice asks for payment of arrears by the due date printed on it. Pay at the divisional office printed on the notice, or on the official power portal. Keep the receipt until the next bill arrives. A disconnection notice means the connection can be cut after the due date, so check the reference number or service number on the bill before paying anywhere.",
+      "topics": [
+        "electricity",
+        "bill",
+        "payment",
+        "arrears",
+        "disconnection",
+        "due date",
+        "service number",
+        "receipt",
+        "portal",
+        "office"
+      ],
+      "advice": ["pay_at_listed_office", "keep_reference_number", "ask_for_receipt", "check_deadline"]
+    },
+    {
+      "id": "eb-payment-safety",
+      "content": "If someone calls or messages asking for payment to a personal number, an app transfer, or asks for an OTP, do not pay. Staff do not ask for an OTP. Pay only through the channels printed on the notice, or listed on the department official page.",
+      "topics": ["otp", "fraud", "call", "message", "personal number", "safety", "payment"],
+      "advice": ["never_share_otp", "pay_only_official_portal", "verify_with_office"]
+    }
+  ]
+}

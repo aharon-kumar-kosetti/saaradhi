@@ -1,0 +1,34 @@
+{
+  "source": {
+    "id": "ayushman_renewal_guide",
+    "department": "Ayushman Bharat",
+    "title": "Health insurance renewal guidance",
+    "url": null,
+    "language": "en",
+    "last_verified": null,
+    "placeholder": true
+  },
+  "chunks": [
+    {
+      "id": "hi-renewal-documents",
+      "content": "A health insurance renewal notice asks you to renew cover before the date on the notice. Renew at the listed office or the official scheme portal, and take the documents the notice asks for, usually a ration card and an identity document. Check that the acknowledgement shows your name and the reference number.",
+      "topics": [
+        "health",
+        "insurance",
+        "renewal",
+        "ration card",
+        "identity document",
+        "acknowledgement",
+        "office",
+        "portal"
+      ],
+      "advice": ["bring_id_proof", "pay_at_listed_office", "keep_reference_number", "ask_for_receipt"]
+    },
+    {
+      "id": "hi-renewal-safety",
+      "content": "Nobody needs your OTP or a payment to a personal account to renew a government health scheme. If a caller threatens that cover ends today unless you pay now, treat it as suspicious and check at the office instead.",
+      "topics": ["otp", "personal account", "threat", "suspicious", "call", "insurance"],
+      "advice": ["never_share_otp", "verify_with_office", "pay_only_official_portal"]
+    }
+  ]
+}

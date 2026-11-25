@@ -87,6 +87,70 @@ describe('API (e2e)', () => {
     return request(app.getHttpServer()).post('/scam/check').send({ warnings: [] }).expect(400);
   });
 
+  it('GET /explain/status reports the local hybrid corpus', async () => {
+    const response = await request(app.getHttpServer()).get('/explain/status').expect(200);
+    expect(response.body).toMatchObject({ backend: 'local-hybrid', verified_sources: 0 });
+    expect(response.body.chunks).toBeGreaterThan(0);
+  });
+
+  it('POST /explain explains an electricity notice with citations', async () => {
+    const response = await request(app.getHttpServer())
+      .post('/explain')
+      .send({
+        language: 'te',
+        fields: {
+          department: 'APSPDCL',
+          category: 'financial_utility',
+          notice_type: 'bill_overdue_disconnection',
+        },
+      })
+      .expect(200);
+
+    expect(response.body.no_answer).toBe(false);
+    expect(response.body.advice).toContain('pay_at_listed_office');
+    expect(response.body.citations[0].chunk_id).toBeTruthy();
+    expect(response.headers['cache-control']).toBe('no-store');
+  });
+
+  it('POST /explain says it does not know when there is nothing to match', async () => {
+    const response = await request(app.getHttpServer())
+      .post('/explain')
+      .send({ language: 'hi', fields: { urls: [], required_documents: [] } })
+      .expect(200);
+
+    expect(response.body).toMatchObject({ no_answer: true, review_reason: 'no_kb_answer' });
+  });
+
+  it('POST /explain rejects an unsupported language', () => {
+    return request(app.getHttpServer())
+      .post('/explain')
+      .send({ language: 'fr', fields: {} })
+      .expect(400);
+  });
+
+  it('POST /review refuses to queue without consent', () => {
+    return request(app.getHttpServer())
+      .post('/review')
+      .send({ reason: 'no_kb_answer', language: 'te', consent: false })
+      .expect(400);
+  });
+
+  it('POST /review queues a consented request', async () => {
+    const response = await request(app.getHttpServer())
+      .post('/review')
+      .send({
+        reason: 'no_kb_answer',
+        language: 'te',
+        consent: true,
+        department: 'APSPDCL',
+        category: 'financial_utility',
+      })
+      .expect(201);
+
+    expect(response.body).toMatchObject({ status: 'open', consent: true });
+    expect(response.body.summary).toBe('APSPDCL / financial_utility');
+  });
+
   it.skipIf(Boolean(process.env.GEMINI_API_KEY))(
     'POST /extract explains that photos need a key',
     async () => {

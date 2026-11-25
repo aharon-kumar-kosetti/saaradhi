@@ -1,0 +1,33 @@
+{
+  "source": {
+    "id": "municipal_property_tax_guide",
+    "department": "Greater Hyderabad Municipal Corporation",
+    "title": "Property tax payment guidance",
+    "url": null,
+    "language": "en",
+    "last_verified": null,
+    "placeholder": true
+  },
+  "chunks": [
+    {
+      "id": "pt-payment-documents",
+      "content": "A property tax demand notice lists the amount due and a due date. Pay at the municipal office counter, or on the corporation official payment page. Take the last paid receipt and a document showing ownership. Keep the acknowledgement with the property papers.",
+      "topics": [
+        "property tax",
+        "demand",
+        "due date",
+        "municipal office",
+        "receipt",
+        "ownership",
+        "acknowledgement"
+      ],
+      "advice": ["pay_at_listed_office", "bring_last_receipt", "bring_id_proof", "ask_for_receipt"]
+    },
+    {
+      "id": "pt-link-safety",
+      "content": "If a notice asks you to pay through a link sent by message, do not pay from the message. Open the corporation official page yourself, or go to the office, and compare the assessment number or reference number printed on the notice.",
+      "topics": ["message", "link", "arrears", "verify", "official page", "office", "reference number"],
+      "advice": ["pay_only_official_portal", "verify_with_office", "keep_reference_number"]
+    }
+  ]
+}
