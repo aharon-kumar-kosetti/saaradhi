@@ -1,0 +1,15 @@
+{
+  "_readme": "STARTER glossary. All entries reviewed=false: a native speaker must confirm before the demo. Aim for 100-200 terms, using the exact wording printed on real notices.",
+  "terms": [
+    {"term": "notice", "telugu": "నోటీసు", "hindi": "नोटिस / सूचना", "notes": "", "reviewed": false},
+    {"term": "due date", "telugu": "చివరి తేదీ", "hindi": "अंतिम तिथि", "notes": "", "reviewed": false},
+    {"term": "disconnection", "telugu": "కనెక్షన్ తొలగింపు", "hindi": "कनेक्शन कटना", "notes": "check how local notices phrase this", "reviewed": false},
+    {"term": "penalty", "telugu": "జరిమానా", "hindi": "जुर्माना", "notes": "", "reviewed": false},
+    {"term": "reference number", "telugu": "రెఫరెన్స్ నంబర్", "hindi": "संदर्भ संख्या", "notes": "", "reviewed": false},
+    {"term": "service number", "telugu": "సర్వీస్ నంబర్", "hindi": "सर्विस नंबर", "notes": "electricity bills usually say service number", "reviewed": false},
+    {"term": "arrears", "telugu": "బకాయిలు", "hindi": "बकाया", "notes": "", "reviewed": false},
+    {"term": "appeal", "telugu": "అప్పీలు", "hindi": "अपील", "notes": "", "reviewed": false},
+    {"term": "attach documents", "telugu": "పత్రాలను జత చేయండి", "hindi": "दस्तावेज़ संलग्न करें", "notes": "", "reviewed": false},
+    {"term": "helpline", "telugu": "హెల్ప్‌లైన్", "hindi": "हेल्पलाइन", "notes": "", "reviewed": false}
+  ]
+}

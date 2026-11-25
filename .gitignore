@@ -1,0 +1,26 @@
+.env
+.env.*
+!.env.example
+node_modules/
+.expo/
+dist/
+data/notices/real/
+*.log
+
+# OS / editor noise
+.DS_Store
+Thumbs.db
+*.swp
+
+# build & test caches
+coverage/
+.nest/
+.expo-shared/
+
+# local tooling state (never commit)
+.freebuff/
+.cloud-attachments/
+supabase/.temp/
+
+# TypeScript incremental build info
+*.tsbuildinfo

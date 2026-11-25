@@ -1,0 +1,18 @@
+{
+  "_readme": "TEMPLATE. Every entry starts with verified=false. A human must confirm each domain from the department's official site before setting verified=true and filling last_verified. The app must NOT treat verified=false entries as official.",
+  "departments": [
+    {"department": "APSPDCL", "state": "AP", "domains": ["apspdcl.in"], "payment_gateways": [],
+     "ref_regex": "TODO: confirm service number format from a real bill", "helpline": "TODO",
+     "portal_url": "https://www.apspdcl.in", "verified": false, "last_verified": null},
+    {"department": "TGSPDCL", "state": "TS", "domains": ["TODO: confirm official domain"], "payment_gateways": [],
+     "ref_regex": "TODO", "helpline": "TODO", "portal_url": "TODO", "verified": false, "last_verified": null},
+    {"department": "EXAMPLE_PROPERTY_TAX_BODY", "state": "AP", "domains": ["TODO"], "payment_gateways": [],
+     "ref_regex": "TODO", "helpline": "TODO", "portal_url": "TODO", "verified": false, "last_verified": null}
+  ],
+  "global_rules": {
+    "shortener_domains": ["bit.ly", "tinyurl.com", "t.co", "cutt.ly", "rb.gy", "is.gd"],
+    "suspicious_tlds": [".xyz", ".top", ".click", ".icu", ".buzz", ".rest"],
+    "lookalike_checks": ["digit-for-letter (1/l, 0/o)", "extra hyphens", "official domain buried in a longer subdomain", "homoglyph characters"],
+    "urgency_phrases_note": "Detected by the LLM in te/hi/en: pay immediately, today only, supply will be cut in X hours, arrest, blocked."
+  }
+}

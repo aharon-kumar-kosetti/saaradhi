@@ -1,0 +1,16 @@
+{
+  "file": "real_01.jpg",
+  "is_real": true,
+  "language": "te",
+  "category": "financial_utility",
+  "department": "APSPDCL",
+  "notice_type": "bill_overdue_disconnection",
+  "amount": 1850,
+  "due_date": "2026-11-30",
+  "reference_number": "REDACTED-OR-TEST",
+  "urls_on_notice": [],
+  "expected_scam_label": "safe",
+  "expected_scam_reasons": [],
+  "required_documents": ["last paid receipt", "ID proof"],
+  "notes": "free text: what is tricky about this notice"
+}
