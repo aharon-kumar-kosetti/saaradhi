@@ -3,8 +3,9 @@
 Voice-first Telugu/Hindi AI copilot that helps people understand notices and forms, spot scams, and know
 exactly what to fill and bring. Prepare-only: it never submits anything for you.
 
-> Status: **M4 — explanation + knowledge base.** Photo/PDF/text -> fields -> Confirm -> scam verdict ->
-> cited what-to-do guidance with Read aloud, and a reviewer request when the KB has no answer.
+> Status: **M5 — form guide, checklist and reminders.** Photo/PDF/text -> fields -> Confirm -> scam
+> verdict -> cited what-to-do guidance -> field-by-field form guide, editable document checklist and
+> local due-date reminders.
 > See `/docs/MILESTONES.md`. `docs/PRD.md` is still a placeholder — the exported PRD needs to be added.
 
 ## Quickstart
@@ -27,7 +28,7 @@ Secrets are never committed.
 | `api/.env` | `GEMINI_API_KEY` | Turns on photo and PDF reading. Without it `/extract` answers 503 for photos and the app tells the user photo reading is off (samples still work). |
 | `api/.env` | `GEMINI_MODEL` | Optional model override. Defaults to `gemini-2.5-flash`. |
 | `api/.env` | `PORT` | Optional. Defaults to `3000`; a value of `0` is ignored. |
-| `app/app.json` | `expo.extra.apiUrl` | API base URL, default `http://localhost:3000`. On a real phone `localhost` is the phone, so set this to the computer's LAN address, e.g. `http://192.168.1.10:3000`, and keep both on the same Wi-Fi. |
+| `app/app.json` | `expo.extra.apiUrl` | API base URL, default `http://localhost:3000`. In Expo Go a `localhost` value is rewritten to the bundler's LAN host automatically, so a phone on the same Wi-Fi reaches the computer without editing this. Set it explicitly for a deployed API. |
 
 ## Extraction (M2)
 
@@ -141,6 +142,25 @@ type only — never the notice or the user's details — and is written to `api/
 
 **Read aloud** uses `expo-speech` with `te-IN` / `hi-IN` / `en-IN`. There is no Sarvam integration yet,
 and a phone without a Telugu or Hindi TTS voice will not speak those languages.
+
+## Form guide, checklist and reminders (M5)
+
+Open a saved notice -> **What to fill and bring** (`/guide/[id]`). Everything on that screen is
+preparation only: Saaradhi never fills, sends or pays anything.
+
+- **Field-by-field guidance** explains how to read and write each detail ("copy the office name exactly
+  as printed"). It deliberately states no fee, deadline or penalty — those come only from a cited KB chunk.
+- **Document checklist** starts from the notice's `required_documents`, then the user ticks, adds their own
+  item, or removes one. It is stored on the notice, so it survives a reload and the 90-day prune.
+- **Local reminders** at T-7, T-3, T-1 and the due day, at 09:00 local time, each toggled separately.
+  Turning one off cancels its notification; dates already past are skipped. Expo Go does show locally
+  scheduled notifications on Android (only remote push needs a development build).
+- A refused notification permission is reported on screen; no reminder id is stored, so the app never
+  claims a reminder it does not have.
+- Reminders are cancelled when the notice is deleted and when **Delete my data** runs. Notices without a
+  due date show why no reminder can be set.
+- **Unverified:** no device run yet — delivery after a reboot, the Android 13+ permission prompt and the
+  Telugu/Hindi speech output have not been observed on hardware.
 
 ## README outline (fill as you build)
 1. Pitch (one paragraph) + demo GIF/video

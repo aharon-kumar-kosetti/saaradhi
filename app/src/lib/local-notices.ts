@@ -1,5 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+import { defaultChecklist, isChecklistItem, type ChecklistItem } from '@/lib/checklist';
 import type { StoredScam } from '@/lib/scam';
 import type { ExtractionFields, ExtractionSource, FieldConfidence } from '@/types/extraction';
 
@@ -19,6 +20,11 @@ export interface LocalNotice {
   warnings: string[];
   /** Null means "not checked", which the screen must say out loud. */
   scam: StoredScam | null;
+  /** Documents to take, editable by the user. */
+  checklist: ChecklistItem[];
+  /** Scheduled notification ids, so a change replaces them instead of stacking duplicates. */
+  reminderIds: string[];
+  reminderOffsets: number[];
 }
 
 function isLocalNotice(value: unknown): value is LocalNotice {
@@ -57,8 +63,16 @@ export async function loadLocalNotices(): Promise<LocalNotice[]> {
   if (!Array.isArray(parsed)) return [];
 
   const now = Date.now();
-  // Notices saved before M3 have no scam field at all.
-  const all = parsed.filter(isLocalNotice).map((notice) => ({ ...notice, scam: notice.scam ?? null }));
+  // Older saves predate scam, checklist and reminders, so fill the gaps rather than drop them.
+  const all = parsed.filter(isLocalNotice).map((notice) => ({
+    ...notice,
+    scam: notice.scam ?? null,
+    checklist: Array.isArray(notice.checklist) && notice.checklist.every(isChecklistItem)
+      ? notice.checklist
+      : defaultChecklist(notice.fields.required_documents),
+    reminderIds: Array.isArray(notice.reminderIds) ? notice.reminderIds : [],
+    reminderOffsets: Array.isArray(notice.reminderOffsets) ? notice.reminderOffsets : [],
+  }));
   const fresh = all.filter((notice) => isFresh(notice, now));
   // Drop expired entries now so the 90-day promise holds even if nobody opens the app for months.
   if (fresh.length !== all.length) await write(fresh);

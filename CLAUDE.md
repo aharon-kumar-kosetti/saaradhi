@@ -1,6 +1,6 @@
 # CLAUDE.md — Saaradhi (read this every session)
 
-**Status: M4 (explanation + KB).** Update this line every milestone. Until `docs/PRD.md` is exported, the
+**Status: M5 (form guide + checklist + reminders).** Update this line every milestone. Until `docs/PRD.md` is exported, the
 spec is `docs/MILESTONES.md` + `supabase/schema.sql` + `data/*`.
 
 ## What we're building
@@ -85,6 +85,7 @@ Scope: inside Saaradhi only. Never control other apps.
 
 ## Commands
 - Install deps: `cd app && npm install` · `cd api && npm install`
+- App typecheck: `cd app && npx tsc --noEmit` · Bundle check: `cd app && npx expo export --platform android`
 - App (Expo Go): `cd app && npx expo start`
 - API: `cd api && npm run start:dev`
 - API health: `curl http://localhost:3000/health`

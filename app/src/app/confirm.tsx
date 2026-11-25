@@ -16,6 +16,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { PrimaryButton } from '@/components/primary-button';
 import { Colors, Radius, Spacing, Type } from '@/constants/tokens';
 import type { TKey } from '@/i18n/translations';
+import { defaultChecklist } from '@/lib/checklist';
 import { parseDateInput, toDateInput } from '@/lib/date-input';
 import { newNoticeId, saveLocalNotice } from '@/lib/local-notices';
 import { takePendingExtraction } from '@/lib/pending-extraction';
@@ -108,6 +109,9 @@ export default function ConfirmScreen() {
         warnings: result.warnings,
         scam: verdict ? toStoredScam(verdict) : null,
         fields: confirmed,
+        checklist: defaultChecklist(confirmed.required_documents),
+        reminderIds: [],
+        reminderOffsets: [],
       });
       router.replace({ pathname: '/my-notice/[id]', params: { id } });
     } catch {

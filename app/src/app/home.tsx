@@ -156,7 +156,7 @@ export default function HomeScreen() {
                   t(notice.fields.category ? `category.${notice.fields.category}` : 'category.other')
                 }
                 meta={notice.fields.category ? t(`category.${notice.fields.category}`) : t('category.other')}
-                sourceText={t(notice.source === 'demo' ? 'home.demo' : 'myNotice.saved')}
+                sourceText={t(notice.source === 'demo' ? 'home.demo' : 'myNotice.sourceRead')}
                 dueLabel={t('notice.dueDate')}
                 dueText={notice.fields.due_date ? formatDate(notice.fields.due_date) : null}
                 onPress={() =>

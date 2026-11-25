@@ -29,10 +29,29 @@ export interface PickedFile {
 const DEFAULT_BASE_URL = 'http://localhost:3000';
 const REQUEST_TIMEOUT_MS = 60_000;
 
+/**
+ * In Expo Go the API runs on the same computer as the bundler, so a phone must reach it by the
+ * computer's LAN address, not by localhost (which is the phone itself).
+ */
+function devHost(): string | null {
+  const hostUri = Constants.expoConfig?.hostUri;
+  if (typeof hostUri !== 'string') return null;
+  const host = hostUri.split(':')[0]?.trim();
+  if (!host || host === 'localhost' || host === '127.0.0.1') return null;
+  return host;
+}
+
+function withReachableHost(url: string): string {
+  if (!/\/\/(localhost|127\.0\.0\.1)(?=[:/]|$)/.test(url)) return url;
+  const host = devHost();
+  if (!host) return url;
+  return url.replace(/\/\/(localhost|127\.0\.0\.1)/, `//${host}`);
+}
+
 function baseUrl(): string {
   const configured = Constants.expoConfig?.extra?.apiUrl;
   const value = typeof configured === 'string' ? configured.trim() : '';
-  return (value.length > 0 ? value : DEFAULT_BASE_URL).replace(/\/+$/, '');
+  return withReachableHost((value.length > 0 ? value : DEFAULT_BASE_URL).replace(/\/+$/, ''));
 }
 
 /** The API only accepts these; anything else is refused before upload. */

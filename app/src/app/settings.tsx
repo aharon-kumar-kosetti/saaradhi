@@ -6,6 +6,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Colors, Radius, Spacing, Type } from '@/constants/tokens';
 import { LANGUAGE_NAMES } from '@/i18n/translations';
+import { cancelAllReminders } from '@/lib/reminders';
 import { useSettings } from '@/lib/settings-context';
 
 export default function SettingsScreen() {
@@ -19,7 +20,7 @@ export default function SettingsScreen() {
         text: t('settings.delete'),
         style: 'destructive',
         onPress: () => {
-          void deleteAllData().then(() => router.replace('/language'));
+          void cancelAllReminders().then(() => deleteAllData()).then(() => router.replace('/language'));
         },
       },
     ]);

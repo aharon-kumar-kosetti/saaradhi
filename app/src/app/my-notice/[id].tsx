@@ -17,6 +17,7 @@ import {
   type LocalNotice,
 } from '@/lib/local-notices';
 import { checkScam, toStoredScam } from '@/lib/scam';
+import { cancelReminders } from '@/lib/reminders';
 import { useSettings } from '@/lib/settings-context';
 import { isScamReason, type ScamReasonCode } from '@/types/scam';
 
@@ -66,14 +67,17 @@ export default function MyNoticeScreen() {
   };
 
   const confirmDelete = () => {
-    if (!id) return;
+    if (!id || !notice) return;
     Alert.alert(t('myNotice.delete'), t('myNotice.deleteBody'), [
       { text: t('settings.cancel'), style: 'cancel' },
       {
         text: t('settings.delete'),
         style: 'destructive',
         onPress: () => {
-          void deleteLocalNotice(id).then(() => router.replace('/home'));
+          // Deleting the notice must also stop its reminders, or the phone keeps nagging.
+          void cancelReminders(notice.reminderIds).then(() =>
+            deleteLocalNotice(id).then(() => router.replace('/home')),
+          );
         },
       },
     ]);
@@ -208,6 +212,12 @@ export default function MyNoticeScreen() {
         ) : null}
 
         <ExplanationCard fields={fields} />
+
+        <PrimaryButton
+          label={t('guide.open')}
+          icon="list-outline"
+          onPress={() => router.push({ pathname: '/guide/[id]', params: { id: notice.id } })}
+        />
 
         <PrimaryButton
           label={checking ? t('scam.checking') : t('scam.check')}

@@ -14,7 +14,7 @@ interface Props {
   onPress: () => void;
 }
 
-/** A notice the user confirmed on this phone. No scam label yet: that arrives in M3. */
+/** A notice the user confirmed on this phone. The scam label lives on the notice screen. */
 export function LocalNoticeCard({ notice, title, meta, sourceText, dueLabel, dueText, onPress }: Props) {
   return (
     <Pressable
