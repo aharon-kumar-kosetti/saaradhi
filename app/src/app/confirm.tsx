@@ -19,7 +19,9 @@ import type { TKey } from '@/i18n/translations';
 import { parseDateInput, toDateInput } from '@/lib/date-input';
 import { newNoticeId, saveLocalNotice } from '@/lib/local-notices';
 import { takePendingExtraction } from '@/lib/pending-extraction';
+import { checkScam, toStoredScam } from '@/lib/scam';
 import { useSettings } from '@/lib/settings-context';
+import type { ExtractionFields } from '@/types/extraction';
 import type { NoticeCategory } from '@/types/notice';
 
 const CATEGORIES: NoticeCategory[] = [
@@ -82,7 +84,20 @@ export default function ConfirmScreen() {
     const finalAmount = parsedAmount !== null && Number.isFinite(parsedAmount) ? parsedAmount : null;
     const id = newNoticeId();
 
+    // Keep the fields the API returned (notice_type, language, urls) and overlay the edits.
+    const confirmed: ExtractionFields = {
+      ...result.fields,
+      department: department.trim() || null,
+      category,
+      amount: finalAmount,
+      due_date: parsedDate,
+      reference_number: reference.trim() || null,
+    };
+
     setSaving(true);
+    // A failed check is not a reason to lose the notice: it is saved as "not checked".
+    const verdict = await checkScam({ fields: confirmed, warnings: result.warnings });
+
     try {
       await saveLocalNotice({
         id,
@@ -91,15 +106,8 @@ export default function ConfirmScreen() {
         source: result.source,
         confidence: result.confidence,
         warnings: result.warnings,
-        // Keep the fields the API returned (notice_type, language, urls) and overlay the edits.
-        fields: {
-          ...result.fields,
-          department: department.trim() || null,
-          category,
-          amount: finalAmount,
-          due_date: parsedDate,
-          reference_number: reference.trim() || null,
-        },
+        scam: verdict ? toStoredScam(verdict) : null,
+        fields: confirmed,
       });
       router.replace({ pathname: '/my-notice/[id]', params: { id } });
     } catch {

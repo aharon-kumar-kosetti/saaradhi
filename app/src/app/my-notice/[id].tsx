@@ -5,11 +5,19 @@ import { ActivityIndicator, Alert, Pressable, ScrollView, StyleSheet, Text, View
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { PrimaryButton } from '@/components/primary-button';
+import { ScamBadge } from '@/components/scam-badge';
 import { Colors, Radius, Spacing, Type } from '@/constants/tokens';
-import type { TKey } from '@/i18n/translations';
+import { SCAM_LABEL_KEY, type TKey } from '@/i18n/translations';
 import { formatAmount, formatDate } from '@/lib/format';
-import { deleteLocalNotice, findLocalNotice, type LocalNotice } from '@/lib/local-notices';
+import {
+  deleteLocalNotice,
+  findLocalNotice,
+  saveLocalNotice,
+  type LocalNotice,
+} from '@/lib/local-notices';
+import { checkScam, toStoredScam } from '@/lib/scam';
 import { useSettings } from '@/lib/settings-context';
+import { isScamReason, type ScamReasonCode } from '@/types/scam';
 
 const WARNING_KEYS: Record<string, TKey> = {
   demo: 'warning.demo',
@@ -23,6 +31,7 @@ export default function MyNoticeScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const [notice, setNotice] = useState<LocalNotice | null>(null);
   const [loading, setLoading] = useState(true);
+  const [checking, setChecking] = useState(false);
 
   useEffect(() => {
     let active = true;
@@ -39,6 +48,21 @@ export default function MyNoticeScreen() {
       active = false;
     };
   }, [id]);
+
+  const recheck = async () => {
+    if (!notice) return;
+    setChecking(true);
+    const verdict = await checkScam({ fields: notice.fields, warnings: notice.warnings });
+    if (!verdict) {
+      setChecking(false);
+      Alert.alert(t('scam.checkFailed'));
+      return;
+    }
+    const updated: LocalNotice = { ...notice, scam: toStoredScam(verdict) };
+    setNotice(updated);
+    await saveLocalNotice(updated);
+    setChecking(false);
+  };
 
   const confirmDelete = () => {
     if (!id) return;
@@ -92,6 +116,9 @@ export default function MyNoticeScreen() {
     .map((code) => WARNING_KEYS[code])
     .filter((key): key is TKey => Boolean(key));
 
+  const reasonText = (code: string): string =>
+    isScamReason(code) ? t(`reason.${code as ScamReasonCode}`) : code;
+
   return (
     <SafeAreaView style={styles.safeArea}>
       <ScrollView contentContainerStyle={styles.content}>
@@ -114,6 +141,23 @@ export default function MyNoticeScreen() {
         </View>
 
         <Text style={styles.title}>{title}</Text>
+
+        {notice.scam ? (
+          <View style={styles.section}>
+            <ScamBadge label={notice.scam.label} text={t(SCAM_LABEL_KEY[notice.scam.label])} />
+            {notice.scam.label === 'safe' ? <Text style={styles.hint}>{t('scam.safeNote')}</Text> : null}
+
+            <Text style={styles.sectionTitle}>{t('scam.why')}</Text>
+            {notice.scam.reasons.map((code) => (
+              <View key={code} style={styles.reasonRow}>
+                <Ionicons name="ellipse" size={10} color={Colors.muted} />
+                <Text style={styles.body}>{reasonText(code)}</Text>
+              </View>
+            ))}
+          </View>
+        ) : (
+          <Text style={styles.hint}>{t('scam.notChecked')}</Text>
+        )}
 
         <View style={styles.card}>
           {rows.length === 0 ? (
@@ -154,13 +198,20 @@ export default function MyNoticeScreen() {
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>{t('notice.whatToNotice')}</Text>
             {warnings.map((key) => (
-              <View key={key} style={styles.warningRow}>
+              <View key={key} style={styles.reasonRow}>
                 <Ionicons name="alert-circle-outline" size={18} color={Colors.muted} />
                 <Text style={styles.body}>{t(key)}</Text>
               </View>
             ))}
           </View>
         ) : null}
+
+        <PrimaryButton
+          label={checking ? t('scam.checking') : t('scam.check')}
+          icon="shield-checkmark-outline"
+          variant="secondary"
+          onPress={() => void recheck()}
+        />
 
         <Text style={styles.hint}>{notice.fileName}</Text>
 
@@ -243,7 +294,7 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: Colors.text,
   },
-  warningRow: {
+  reasonRow: {
     flexDirection: 'row',
     gap: Spacing.sm,
     alignItems: 'flex-start',

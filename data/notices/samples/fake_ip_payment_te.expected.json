@@ -1,0 +1,16 @@
+{
+  "file": "fake_ip_payment_te.txt",
+  "is_real": false,
+  "language": "te",
+  "category": "scam_fraud",
+  "department": null,
+  "notice_type": "bill_due",
+  "amount": 5500,
+  "due_date": null,
+  "reference_number": null,
+  "urls_on_notice": ["http://103.21.44.9/pay"],
+  "expected_scam_label": "dangerous",
+  "expected_scam_reasons": ["raw IP address link", "plain http", "QR payment request", "urgency"],
+  "required_documents": [],
+  "notes": "Synthetic. Written for M3: payment link is a bare IP address behind a QR code."
+}

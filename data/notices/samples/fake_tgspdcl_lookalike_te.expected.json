@@ -1,0 +1,16 @@
+{
+  "file": "fake_tgspdcl_lookalike_te.txt",
+  "is_real": false,
+  "language": "te",
+  "category": "scam_fraud",
+  "department": "TGSPDCL",
+  "notice_type": "bill_overdue_disconnection",
+  "amount": 3200,
+  "due_date": null,
+  "reference_number": null,
+  "urls_on_notice": ["https://tgspdcl-power.top/pay"],
+  "expected_scam_label": "dangerous",
+  "expected_scam_reasons": ["lookalike domain", "suspicious TLD", "urgency and threat to disconnect"],
+  "required_documents": [],
+  "notes": "Synthetic. Written for M3 scam labelling: lookalike host on a .top domain with a threat."
+}

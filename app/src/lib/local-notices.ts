@@ -1,5 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+import type { StoredScam } from '@/lib/scam';
 import type { ExtractionFields, ExtractionSource, FieldConfidence } from '@/types/extraction';
 
 /** Guest promise: nothing is kept longer than this. */
@@ -16,6 +17,8 @@ export interface LocalNotice {
   fields: ExtractionFields;
   confidence: FieldConfidence;
   warnings: string[];
+  /** Null means "not checked", which the screen must say out loud. */
+  scam: StoredScam | null;
 }
 
 function isLocalNotice(value: unknown): value is LocalNotice {
@@ -54,7 +57,8 @@ export async function loadLocalNotices(): Promise<LocalNotice[]> {
   if (!Array.isArray(parsed)) return [];
 
   const now = Date.now();
-  const all = parsed.filter(isLocalNotice);
+  // Notices saved before M3 have no scam field at all.
+  const all = parsed.filter(isLocalNotice).map((notice) => ({ ...notice, scam: notice.scam ?? null }));
   const fresh = all.filter((notice) => isFresh(notice, now));
   // Drop expired entries now so the 90-day promise holds even if nobody opens the app for months.
   if (fresh.length !== all.length) await write(fresh);

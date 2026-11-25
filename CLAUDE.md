@@ -1,6 +1,6 @@
 # CLAUDE.md — Saaradhi (read this every session)
 
-**Status: M2 (extraction).** Update this line every milestone. Until `docs/PRD.md` is exported, the
+**Status: M3 (scam checker).** Update this line every milestone. Until `docs/PRD.md` is exported, the
 spec is `docs/MILESTONES.md` + `supabase/schema.sql` + `data/*`.
 
 ## What we're building
@@ -90,3 +90,4 @@ Scope: inside Saaradhi only. Never control other apps.
 - API health: `curl http://localhost:3000/health`
 - Tests: `npm test` in each package
 - Accuracy table: `cd api && npm run accuracy` (per-field expected vs extracted for `/data/notices`)
+- Scam label table: `cd api && npm run scam-report` (fake-set verdicts; lists every wrong label)

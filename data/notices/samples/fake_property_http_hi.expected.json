@@ -1,0 +1,16 @@
+{
+  "file": "fake_property_http_hi.txt",
+  "is_real": false,
+  "language": "hi",
+  "category": "financial_utility",
+  "department": "Greater Hyderabad Municipal Corporation",
+  "notice_type": "property_tax_demand",
+  "amount": 6400,
+  "due_date": "2026-12-15",
+  "reference_number": null,
+  "urls_on_notice": ["http://ghmc-property.co.in/status"],
+  "expected_scam_label": "suspicious",
+  "expected_scam_reasons": ["unknown domain", "plain http, not https"],
+  "required_documents": [],
+  "notes": "Synthetic. Written for M3: no threat words, but an unknown http domain for a tax payment."
+}

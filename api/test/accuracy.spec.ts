@@ -1,6 +1,5 @@
-import { existsSync, readFileSync, readdirSync } from 'node:fs';
+import { readFileSync } from 'node:fs';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
 
 import { describe, expect, it } from 'vitest';
 
@@ -8,26 +7,7 @@ import type { ExtractionResult } from '../src/extraction/extraction.types.js';
 import { GeminiExtractor } from '../src/extraction/gemini.extractor.js';
 import { TextNoticeExtractor } from '../src/extraction/text.extractor.js';
 
-const NOTICES_DIR = path.resolve(
-  path.dirname(fileURLToPath(import.meta.url)),
-  '../../data/notices',
-);
-
-interface ExpectedNotice {
-  file: string;
-  is_real: boolean;
-  language: string;
-  category: string;
-  department: string;
-  notice_type: string;
-  amount: number | null;
-  due_date: string | null;
-  reference_number: string | null;
-  urls_on_notice: string[];
-  expected_scam_label: string;
-  required_documents: string[];
-  notes?: string;
-}
+import { expectedFiles, sourceFileFor, type ExpectedNotice } from './helpers/notices.js';
 
 interface Row {
   file: string;
@@ -37,22 +17,12 @@ interface Row {
   ok: boolean;
 }
 
-/** Every *.expected.json under /data/notices, so new photos are picked up automatically. */
-function expectedFiles(directory: string): string[] {
-  if (!existsSync(directory)) return [];
-  return readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
-    const full = path.join(directory, entry.name);
-    if (entry.isDirectory()) return expectedFiles(full);
-    return entry.name.endsWith('.expected.json') ? [full] : [];
-  });
-}
-
 function compare(expected: ExpectedNotice, actual: ExtractionResult): Row[] {
   const rows: Omit<Row, 'ok'>[] = [
-    { field: 'language', expected: expected.language, actual: text(actual.fields.language) },
-    { field: 'category', expected: expected.category, actual: text(actual.fields.category) },
-    { field: 'department', expected: expected.department, actual: text(actual.fields.department) },
-    { field: 'notice_type', expected: expected.notice_type, actual: text(actual.fields.notice_type) },
+    { field: 'language', expected: text(expected.language), actual: text(actual.fields.language) },
+    { field: 'category', expected: text(expected.category), actual: text(actual.fields.category) },
+    { field: 'department', expected: text(expected.department), actual: text(actual.fields.department) },
+    { field: 'notice_type', expected: text(expected.notice_type), actual: text(actual.fields.notice_type) },
     { field: 'amount', expected: text(expected.amount), actual: text(actual.fields.amount) },
     { field: 'due_date', expected: text(expected.due_date), actual: text(actual.fields.due_date) },
     {
@@ -85,7 +55,7 @@ function list(values: string[]): string {
 
 describe('extraction accuracy on /data/notices', () => {
   it('matches every expected field, or reports each mismatch', async () => {
-    const files = expectedFiles(NOTICES_DIR);
+    const files = expectedFiles();
     expect(files.length, 'no *.expected.json found in /data/notices').toBeGreaterThan(0);
 
     const extractor = new TextNoticeExtractor();
@@ -96,24 +66,23 @@ describe('extraction accuracy on /data/notices', () => {
 
     for (const expectedPath of files) {
       const expected = JSON.parse(readFileSync(expectedPath, 'utf8')) as ExpectedNotice;
-      const directory = path.dirname(expectedPath);
-      const sourceName = path.basename(expected.file);
-      const textPath = path.join(directory, sourceName);
-      const baseName = sourceName.replace(/\.[^.]+$/, '');
-      const imagePath = ['jpg', 'jpeg', 'png', 'webp', 'pdf']
-        .map((extension) => path.join(directory, `${baseName}.${extension}`))
-        .find((candidate) => existsSync(candidate));
+      const source = sourceFileFor(expectedPath, expected);
 
-      let actual: ExtractionResult | null = null;
-      if (existsSync(textPath) && textPath.endsWith('.txt')) {
-        actual = extractor.extract(readFileSync(textPath, 'utf8'));
-      } else if (imagePath && apiKey) {
+      if (!source) {
+        skipped.push(`${expected.file}: no source file`);
+        continue;
+      }
+
+      let actual: ExtractionResult;
+      if (source.endsWith('.txt')) {
+        actual = extractor.extract(readFileSync(source, 'utf8'));
+      } else if (apiKey) {
         actual = await new GeminiExtractor(apiKey, model).extract(
-          readFileSync(imagePath),
-          imagePath.endsWith('.pdf') ? 'application/pdf' : 'image/jpeg',
+          readFileSync(source),
+          source.endsWith('.pdf') ? 'application/pdf' : 'image/jpeg',
         );
       } else {
-        skipped.push(`${sourceName}: ${imagePath ? 'GEMINI_API_KEY not set' : 'no source file'}`);
+        skipped.push(`${path.basename(source)}: GEMINI_API_KEY not set`);
         continue;
       }
 

@@ -1,0 +1,16 @@
+{
+  "file": "fake_no_link_urgency_hi.txt",
+  "is_real": false,
+  "language": "hi",
+  "category": "scam_fraud",
+  "department": null,
+  "notice_type": "bill_overdue_disconnection",
+  "amount": 500,
+  "due_date": null,
+  "reference_number": null,
+  "urls_on_notice": [],
+  "expected_scam_label": "suspicious",
+  "expected_scam_reasons": ["removal threat with a same-day deadline", "no official link to verify the claim"],
+  "required_documents": [],
+  "notes": "Synthetic. Written for M3: pressure and a deadline, but no link at all, so never more than suspicious."
+}

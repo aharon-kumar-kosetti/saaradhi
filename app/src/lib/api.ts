@@ -75,7 +75,7 @@ function toApiError(status: number, payload: unknown): ApiError {
   return new ApiError('server_error');
 }
 
-async function request<T>(path: string, init?: RequestInit): Promise<T> {
+export async function apiRequest<T>(path: string, init?: RequestInit): Promise<T> {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
 
@@ -95,16 +95,16 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
 }
 
 export function fetchExtractorStatus(): Promise<ExtractorStatus> {
-  return request<ExtractorStatus>('/extract/status');
+  return apiRequest<ExtractorStatus>('/extract/status');
 }
 
 export function extractDemo(id: string): Promise<ExtractionResult> {
-  return request<ExtractionResult>(`/extract/demo/${encodeURIComponent(id)}`, { method: 'POST' });
+  return apiRequest<ExtractionResult>(`/extract/demo/${encodeURIComponent(id)}`, { method: 'POST' });
 }
 
 export async function extractFile(file: PickedFile): Promise<ExtractionResult> {
   const dataBase64 = await readAsStringAsync(file.uri, { encoding: 'base64' });
-  return request<ExtractionResult>('/extract', {
+  return apiRequest<ExtractionResult>('/extract', {
     method: 'POST',
     headers: { 'content-type': 'application/json' },
     body: JSON.stringify({ fileName: file.name, mimeType: file.mimeType, dataBase64 }),

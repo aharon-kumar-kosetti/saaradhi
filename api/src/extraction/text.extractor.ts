@@ -48,7 +48,11 @@ const SHORTENERS = ['bit.ly', 'tinyurl.com', 't.co', 'cutt.ly', 'rb.gy', 'is.gd'
 const SUSPICIOUS_TLDS = ['.xyz', '.top', '.click', '.icu', '.buzz', '.rest'];
 
 const URGENCY =
-  /(ఈరోజే|ఇప్పుడే|వెంటనే|కట్\s*అవుతుంది|तुरंत|आज ही|वरना|कट\s*जाएगा|बंद\s*हो\s*जाएगा|immediately|today only|within\s*\d+\s*(?:hours|hrs)|last chance|will be (?:cut|blocked|suspended))/i;
+  /(ఈరోజే|ఇప్పుడే|వెంటనే|కట్\s*అవుతుంది|तुरंत|आज ही|वरना|कट\s*जाएगा|बंद\s*हो\s*जाएगा|immediately|today only|within\s*\d+\s*(?:hours|hrs)|last chance|will be (?:cut|blocked|suspended|cancelled))/i;
+
+/** A QR code next to a payment word is a classic redirect to a private account. */
+const QR_PAYMENT =
+  /(?:qr\s*(?:code)?|क्यूआर|క్యూఆర్|క్యూ\s*ఆర్)[\s\S]{0,40}(?:pay|भुगतान|చెల్లి)/i;
 
 interface NoticeTypeRule {
   pattern: RegExp;
@@ -111,6 +115,7 @@ export class TextNoticeExtractor {
     const warnings: string[] = [];
     if (hasSuspiciousLink(urls)) warnings.push('suspicious_link');
     if (URGENCY.test(body)) warnings.push('urgent_language');
+    if (QR_PAYMENT.test(body)) warnings.push('qr_payment_request');
     if (!department && !amount && !dueDate && !reference && urls.length === 0) {
       warnings.push('nothing_found');
     }

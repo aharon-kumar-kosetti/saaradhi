@@ -34,6 +34,8 @@ when a value is not clearly visible. Copy amounts and dates exactly; do not conv
 - urls: every link or domain printed on the notice.
 - required_documents: documents the notice asks the reader to bring.
 - confidence: 0 to 1 per field, based on how legible it was. Use 0 when null.
+- risk_signals: printed facts only. urgent_language = the notice uses threats or a deadline to force
+  immediate payment. qr_payment_request = a QR code is shown together with a payment request.
 Do not decide whether the notice is genuine or a scam. Do not add advice or explanations.`;
 
 /** The subset of the Gemini response we use; anything else is ignored. */
@@ -130,14 +132,20 @@ export class GeminiExtractor {
       confidence[name] = hasValue ? clampConfidence(rawConfidence[name], 0.7) : 0;
     }
 
-    const payload: GeminiPayload = { fields, confidence, warnings: [] };
+    const warnings = lowConfidenceWarnings(confidence);
+    const risk = record.risk_signals;
+    const riskRecord = risk && typeof risk === 'object' ? (risk as Record<string, unknown>) : {};
+    if (riskRecord.urgent_language === true) warnings.push('urgent_language');
+    if (riskRecord.qr_payment_request === true) warnings.push('qr_payment_request');
+
+    const payload: GeminiPayload = { fields, confidence, warnings };
     return {
       source: 'gemini',
       model: this.model,
       fields: payload.fields,
       confidence: payload.confidence,
       missing: missingNames(fields),
-      warnings: lowConfidenceWarnings(payload.confidence),
+      warnings: payload.warnings,
     };
   }
 }
@@ -185,6 +193,13 @@ function responseSchema(): Record<string, unknown> {
       reference_number: nullableString,
       urls: { type: 'ARRAY', items: { type: 'STRING' } },
       required_documents: { type: 'ARRAY', items: { type: 'STRING' } },
+      risk_signals: {
+        type: 'OBJECT',
+        properties: {
+          urgent_language: { type: 'BOOLEAN' },
+          qr_payment_request: { type: 'BOOLEAN' },
+        },
+      },
       confidence: {
         type: 'OBJECT',
         properties: {

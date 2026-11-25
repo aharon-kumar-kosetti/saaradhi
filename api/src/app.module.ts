@@ -4,9 +4,10 @@ import { AppController } from './app.controller.js';
 import { AppService } from './app.service.js';
 import { ExtractionModule } from './extraction/extraction.module.js';
 import { HealthController } from './health/health.controller.js';
+import { ScamModule } from './scam/scam.module.js';
 
 @Module({
-  imports: [ExtractionModule],
+  imports: [ExtractionModule, ScamModule],
   controllers: [AppController, HealthController],
   providers: [AppService],
 })

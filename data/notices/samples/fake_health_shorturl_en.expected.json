@@ -1,0 +1,16 @@
+{
+  "file": "fake_health_shorturl_en.txt",
+  "is_real": false,
+  "language": "en",
+  "category": "scam_fraud",
+  "department": "Health department",
+  "notice_type": "insurance_renewal",
+  "amount": 1499,
+  "due_date": null,
+  "reference_number": null,
+  "urls_on_notice": ["https://tinyurl.com/ayushman-pay"],
+  "expected_scam_label": "dangerous",
+  "expected_scam_reasons": ["shortened link", "urgency and threat to cancel the policy"],
+  "required_documents": [],
+  "notes": "Synthetic. Written for M3: a shortener plus a same-day cancellation threat."
+}

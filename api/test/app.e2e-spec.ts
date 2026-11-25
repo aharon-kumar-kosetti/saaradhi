@@ -59,6 +59,34 @@ describe('API (e2e)', () => {
     return request(app.getHttpServer()).post('/extract').send({ mimeType: 'image/jpeg' }).expect(400);
   });
 
+  it('POST /scam/check labels a lookalike link as dangerous', async () => {
+    const response = await request(app.getHttpServer())
+      .post('/scam/check')
+      .send({
+        fields: { department: 'APSPDCL', urls: ['https://apspdcl-bill.xyz/pay'] },
+        warnings: ['urgent_language'],
+      })
+      .expect(200);
+
+    expect(response.body).toMatchObject({ label: 'dangerous' });
+    expect(response.body.reasons).toEqual(expect.arrayContaining(['lookalike_domain', 'urgent_language']));
+    expect(response.headers['cache-control']).toBe('no-store');
+  });
+
+  it('POST /scam/check is unsure about an unverified official link', async () => {
+    const response = await request(app.getHttpServer())
+      .post('/scam/check')
+      .send({ fields: { department: 'APSPDCL', urls: ['https://apspdcl.in/pay'] } })
+      .expect(200);
+
+    expect(response.body.label).toBe('unsure');
+    expect(response.body.registry).toMatchObject({ entry_found: true, verified: false });
+  });
+
+  it('POST /scam/check rejects a body without fields', () => {
+    return request(app.getHttpServer()).post('/scam/check').send({ warnings: [] }).expect(400);
+  });
+
   it.skipIf(Boolean(process.env.GEMINI_API_KEY))(
     'POST /extract explains that photos need a key',
     async () => {

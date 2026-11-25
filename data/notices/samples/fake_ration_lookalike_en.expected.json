@@ -1,0 +1,20 @@
+{
+  "file": "fake_ration_lookalike_en.txt",
+  "is_real": false,
+  "language": "en",
+  "category": "scam_fraud",
+  "department": null,
+  "notice_type": null,
+  "amount": 250,
+  "due_date": null,
+  "reference_number": null,
+  "urls_on_notice": ["https://apspdcl.in.verify-now.click/login"],
+  "expected_scam_label": "dangerous",
+  "expected_scam_reasons": [
+    "real department domain buried inside a longer host",
+    "suspicious TLD",
+    "threat to block the card today"
+  ],
+  "required_documents": [],
+  "notes": "Synthetic. Written for M3: the official name is a subdomain of an attacker-controlled host."
+}
