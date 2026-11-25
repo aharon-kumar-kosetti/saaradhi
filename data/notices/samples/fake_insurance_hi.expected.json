@@ -1,0 +1,16 @@
+{
+  "file": "fake_insurance_hi.txt",
+  "is_real": false,
+  "language": "hi",
+  "category": "scam_fraud",
+  "department": "Health department",
+  "notice_type": "insurance_suspended",
+  "amount": 999,
+  "due_date": null,
+  "reference_number": null,
+  "urls_on_notice": ["https://bit.ly/ayushman-verify"],
+  "expected_scam_label": "dangerous",
+  "expected_scam_reasons": ["shortened link", "urgency and threat to cancel the policy"],
+  "required_documents": [],
+  "notes": "Synthetic scam sample for M2 extraction; scam labelling is judged in M3."
+}

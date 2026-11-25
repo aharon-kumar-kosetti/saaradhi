@@ -2,9 +2,11 @@ import { Module } from '@nestjs/common';
 
 import { AppController } from './app.controller.js';
 import { AppService } from './app.service.js';
+import { ExtractionModule } from './extraction/extraction.module.js';
 import { HealthController } from './health/health.controller.js';
 
 @Module({
+  imports: [ExtractionModule],
   controllers: [AppController, HealthController],
   providers: [AppService],
 })

@@ -1,0 +1,16 @@
+{
+  "file": "fake_bill_apspdcl_te.txt",
+  "is_real": false,
+  "language": "te",
+  "category": "scam_fraud",
+  "department": "APSPDCL",
+  "notice_type": "bill_overdue_disconnection",
+  "amount": 4999,
+  "due_date": null,
+  "reference_number": null,
+  "urls_on_notice": ["https://apspdcl-bill.xyz/pay"],
+  "expected_scam_label": "dangerous",
+  "expected_scam_reasons": ["lookalike domain on a suspicious TLD", "urgency and threat to disconnect"],
+  "required_documents": [],
+  "notes": "Synthetic scam sample for M2 extraction; scam labelling is judged in M3."
+}

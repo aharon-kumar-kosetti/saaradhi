@@ -1,0 +1,16 @@
+{
+  "file": "real_property_ghmc_en.txt",
+  "is_real": true,
+  "language": "en",
+  "category": "financial_utility",
+  "department": "Greater Hyderabad Municipal Corporation",
+  "notice_type": "property_tax_demand",
+  "amount": 4750,
+  "due_date": "2027-01-05",
+  "reference_number": "1098765432",
+  "urls_on_notice": ["https://ghmc.gov.in"],
+  "expected_scam_label": "unsure",
+  "expected_scam_reasons": [],
+  "required_documents": ["last paid receipt", "ownership proof"],
+  "notes": "Synthetic notice written for parser tests; the domain is illustrative."
+}

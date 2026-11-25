@@ -1,23 +1,47 @@
 import { Ionicons } from '@expo/vector-icons';
 import * as DocumentPicker from 'expo-document-picker';
 import * as ImagePicker from 'expo-image-picker';
-import { router } from 'expo-router';
+import { router, useFocusEffect } from 'expo-router';
+import { useCallback, useState } from 'react';
 import { Alert, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { LocalNoticeCard } from '@/components/local-notice-card';
 import { NoticeCard } from '@/components/notice-card';
 import { PrimaryButton } from '@/components/primary-button';
 import { Colors, Radius, Spacing, Type } from '@/constants/tokens';
 import { MOCK_NOTICES } from '@/data/mock-notices';
 import { SCAM_LABEL_KEY } from '@/i18n/translations';
+import { mimeTypeFor, type PickedFile } from '@/lib/api';
+import { formatDate } from '@/lib/format';
+import { loadLocalNotices, type LocalNotice } from '@/lib/local-notices';
 import { useSettings } from '@/lib/settings-context';
 import { CURRENT_CONSENT_VERSION } from '@/lib/storage';
 
 export default function HomeScreen() {
   const { t, language, settings } = useSettings();
   const consented = settings.consentVersion >= CURRENT_CONSENT_VERSION;
+  const [notices, setNotices] = useState<LocalNotice[]>([]);
 
-  const openReading = (name: string) => router.push({ pathname: '/reading', params: { name } });
+  // Reload on focus so a notice saved or deleted on another screen shows up immediately.
+  useFocusEffect(
+    useCallback(() => {
+      let active = true;
+      loadLocalNotices().then((loaded) => {
+        if (active) setNotices(loaded);
+      });
+      return () => {
+        active = false;
+      };
+    }, []),
+  );
+
+  const goToReading = (file: PickedFile) => {
+    router.push({
+      pathname: '/reading',
+      params: { uri: file.uri, name: file.name, mimeType: file.mimeType },
+    });
+  };
 
   const pickPhoto = async (fromCamera: boolean) => {
     if (!consented) {
@@ -38,7 +62,10 @@ export default function HomeScreen() {
       : await ImagePicker.launchImageLibraryAsync({ quality: 0.7, mediaTypes: ['images'] });
 
     if (result.canceled) return;
-    openReading(result.assets[0]?.fileName ?? 'photo');
+    const asset = result.assets[0];
+    if (!asset) return;
+    const name = asset.fileName ?? 'photo.jpg';
+    goToReading({ uri: asset.uri, name, mimeType: asset.mimeType ?? mimeTypeFor(name) });
   };
 
   const pickPdf = async () => {
@@ -53,7 +80,8 @@ export default function HomeScreen() {
     });
     if (result.canceled) return;
     const asset = result.assets?.[0];
-    if (asset) openReading(asset.name);
+    if (!asset) return;
+    goToReading({ uri: asset.uri, name: asset.name, mimeType: asset.mimeType ?? 'application/pdf' });
   };
 
   return (
@@ -99,11 +127,49 @@ export default function HomeScreen() {
               />
             </View>
           </View>
+
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel={t('home.sample')}
+            onPress={() => router.push({ pathname: '/reading', params: { demo: 'bill' } })}
+            style={({ pressed }) => [styles.sampleButton, pressed && styles.pressed]}
+          >
+            <Text style={styles.sampleLabel}>{t('home.sample')}</Text>
+            <Ionicons name="chevron-forward" size={20} color={Colors.primary} />
+          </Pressable>
         </View>
 
         <View style={styles.recent}>
           <View style={styles.recentHeader}>
-            <Text style={styles.sectionTitle}>{t('home.recent')}</Text>
+            <Text style={styles.sectionTitle}>{t('home.myNotices')}</Text>
+          </View>
+
+          {notices.length === 0 ? (
+            <Text style={styles.emptyText}>{t('home.myNoticesEmpty')}</Text>
+          ) : (
+            notices.map((notice) => (
+              <LocalNoticeCard
+                key={notice.id}
+                notice={notice}
+                title={
+                  notice.fields.department ??
+                  t(notice.fields.category ? `category.${notice.fields.category}` : 'category.other')
+                }
+                meta={notice.fields.category ? t(`category.${notice.fields.category}`) : t('category.other')}
+                sourceText={t(notice.source === 'demo' ? 'home.demo' : 'myNotice.saved')}
+                dueLabel={t('notice.dueDate')}
+                dueText={notice.fields.due_date ? formatDate(notice.fields.due_date) : null}
+                onPress={() =>
+                  router.push({ pathname: '/my-notice/[id]', params: { id: notice.id } })
+                }
+              />
+            ))
+          )}
+        </View>
+
+        <View style={styles.recent}>
+          <View style={styles.recentHeader}>
+            <Text style={styles.sectionTitle}>{t('home.samples')}</Text>
             <Text style={styles.demoChip}>{t('home.demo')}</Text>
           </View>
 
@@ -172,6 +238,18 @@ const styles = StyleSheet.create({
   secondaryItem: {
     flex: 1,
   },
+  sampleButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    minHeight: Type.touchTarget,
+    paddingHorizontal: Spacing.md,
+  },
+  sampleLabel: {
+    fontSize: Type.small,
+    fontWeight: '700',
+    color: Colors.primary,
+  },
   noticeBanner: {
     fontSize: Type.small,
     color: '#D32F2F',
@@ -188,6 +266,10 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: '700',
     color: Colors.text,
+  },
+  emptyText: {
+    fontSize: Type.small,
+    color: Colors.muted,
   },
   demoChip: {
     fontSize: 14,

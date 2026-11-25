@@ -1,0 +1,16 @@
+{
+  "file": "real_health_ayushman_hi.txt",
+  "is_real": true,
+  "language": "hi",
+  "category": "health_insurance",
+  "department": "Ayushman Bharat",
+  "notice_type": "insurance_renewal",
+  "amount": 1200,
+  "due_date": "2026-12-12",
+  "reference_number": "HLT/2026/88/4132",
+  "urls_on_notice": ["https://health.ap.gov.in"],
+  "expected_scam_label": "unsure",
+  "expected_scam_reasons": [],
+  "required_documents": [],
+  "notes": "Synthetic notice written for parser tests; the domain is illustrative."
+}

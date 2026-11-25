@@ -1,0 +1,16 @@
+{
+  "file": "real_bill_apspdcl_te.txt",
+  "is_real": true,
+  "language": "te",
+  "category": "financial_utility",
+  "department": "APSPDCL",
+  "notice_type": "bill_due",
+  "amount": 1850,
+  "due_date": "2026-11-30",
+  "reference_number": "APSD/2026/0041827",
+  "urls_on_notice": [],
+  "expected_scam_label": "unsure",
+  "expected_scam_reasons": [],
+  "required_documents": [],
+  "notes": "Synthetic notice written for parser tests; no real person's details."
+}
