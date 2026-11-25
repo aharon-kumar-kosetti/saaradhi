@@ -5,6 +5,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Colors, Radius, Spacing, Type } from '@/constants/tokens';
 import { useSettings } from '@/lib/settings-context';
+import { CURRENT_CONSENT_VERSION } from '@/lib/storage';
 import type { Language } from '@/types/notice';
 
 const OPTIONS: { code: Language; native: string; english: string }[] = [
@@ -14,14 +15,17 @@ const OPTIONS: { code: Language; native: string; english: string }[] = [
 ];
 
 export default function LanguageScreen() {
-  const { language, setLanguage, t } = useSettings();
+  const { language, setLanguage, settings, t } = useSettings();
   const { next } = useLocalSearchParams<{ next?: string }>();
 
   const choose = async (code: Language) => {
     await setLanguage(code);
-    // First run goes to Home; changing from Settings just comes back.
-    if (next === 'home') router.replace('/home');
-    else router.back();
+    // Changing from Settings: return there. First run: no history exists, so route onward.
+    if (next === 'back') {
+      router.back();
+      return;
+    }
+    router.replace(settings.consentVersion >= CURRENT_CONSENT_VERSION ? '/home' : '/consent');
   };
 
   return (
