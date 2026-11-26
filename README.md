@@ -228,12 +228,12 @@ Built for **HackWithAditya 2026** (theme: *AI for Bharat*) by students of SRKR E
 
 | Role | Name |
 |---|---|
-| Team Lead | Yirri Bhanu Naga Prakash |
+| Team Lead | Kosetti Aharon Kumar |
 | Member | Katreddi Bhanu Teja Sri |
 | Member | Reddy Venkata Saketh |
 | Member | Jogi Abishai |
 | Member | Guddeti Dathri Sri Sai Anvitha |
-| Member | Kosetti Aharon Kumar |
+| Member | Yirri Bhanu Naga Prakash |
 
 ## Disclaimer
 
