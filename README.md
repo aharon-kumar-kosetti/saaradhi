@@ -1,176 +1,248 @@
+<div align="center">
+
 # Saaradhi (సారథి)
 
-Voice-first Telugu/Hindi AI copilot that helps people understand notices and forms, spot scams, and know
-exactly what to fill and bring. Prepare-only: it never submits anything for you.
+### Your Telugu-first AI guide through notices, forms and scams
 
-> Status: **M5 — form guide, checklist and reminders.** Photo/PDF/text -> fields -> Confirm -> scam
-> verdict -> cited what-to-do guidance -> field-by-field form guide, editable document checklist and
-> local due-date reminders.
-> See `/docs/MILESTONES.md`. `docs/PRD.md` is still a placeholder — the exported PRD needs to be added.
+*Photograph a notice. Understand it in your language. Know exactly what to fill, what to bring, and whether it is a scam.*
 
-## Quickstart
+![Platform](https://img.shields.io/badge/platform-Android%20(Expo)-3DDC84?logo=android&logoColor=white)
+![Languages](https://img.shields.io/badge/languages-Telugu%20%7C%20Hindi%20%7C%20English-5B2EBF)
+![Theme](https://img.shields.io/badge/theme-AI%20for%20Bharat-orange)
+![Status](https://img.shields.io/badge/status-Level%201%20prototype-blue)
+![Hackathon](https://img.shields.io/badge/HackWithAditya-2026-black)
 
-```bash
-# API (NestJS) — http://localhost:3000/health
-cd api && npm install && npm run start:dev
+</div>
 
-# App (Expo Go) — scan the QR with Expo Go on Android
-cd app && npm install && npx expo start
+---
+
+## Can't install the app? Start here
+
+You do not need to download anything to understand Saaradhi. This page walks you through the app screen by screen, explains how it works, and shows what is built today.
+
+> **Saaradhi** is Telugu for *charioteer*: the one who guides you safely. That is the whole idea.
+
+### Screen walkthrough
+
+<table>
+  <tr>
+    <td align="center" width="33%">
+      <img src="docs/screens/screen-1.webp" alt="Choose your language" width="240"/><br/>
+      <b>1. Choose your language</b><br/>
+      <sub>Telugu, Hindi or English at first launch. Large cards, the selected language ticked, changeable at any time.</sub>
+    </td>
+    <td align="center" width="33%">
+      <img src="docs/screens/screen-2.webp" alt="Privacy consent" width="240"/><br/>
+      <b>2. Understand what happens to your photo</b><br/>
+      <sub>A photo leaves the phone only with permission, guest data is deleted after 90 days, nothing is ever submitted for you.</sub>
+    </td>
+    <td align="center" width="33%">
+      <img src="docs/screens/screen-3.webp" alt="Home screen" width="240"/><br/>
+      <b>3. Simple, large-button home</b><br/>
+      <sub>One main action: scan a notice. Gallery and PDF sit beside it, with samples to try and a list of saved notices.</sub>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" width="33%">
+      <img src="docs/screens/screen-4.webp" alt="Scam result screen" width="240"/><br/>
+      <b>4. A clear label, with reasons</b><br/>
+      <sub>Dangerous, Suspicious, Safe or Not sure, the sender and amount read from the notice, and plain reasons such as a shortened link.</sub>
+    </td>
+    <td align="center" width="33%">
+      <img src="docs/screens/screen-5.webp" alt="Settings screen" width="240"/><br/>
+      <b>5. Language and data in one place</b><br/>
+      <sub>Switch language, see exactly where data is kept, and delete everything with a single tap.</sub>
+    </td>
+    <td></td>
+  </tr>
+</table>
+
+### What using it looks like
+
+1. **Open Saaradhi** and pick Telugu, Hindi or English.
+2. **Take a photo** of a notice, upload a picture, or pick a PDF.
+3. **Check the details** Saaradhi read from it (amount, due date, reference number) and fix anything wrong.
+4. **See the label:** Safe, Suspicious or Dangerous, with plain reasons.
+5. **Listen or read** what the notice means, what happens if you ignore it, and what to do next.
+6. **Follow the form guide:** what to write in each field, where to find it, and which documents to attach.
+7. **Get reminders** before the deadline, even without internet.
+8. **Ask for a person** if Saaradhi is not sure. Nothing is shared until you agree.
+
+---
+
+## The problem
+
+- **Notices are hard to read.** Utility, tax, bank, insurance and welfare notices use dense, formal language. People often cannot tell what is demanded, by when, or what happens if they ignore it.
+- **Forms need a helper.** Elderly, low-literacy and first-generation digital users depend on someone else to read and fill in forms, and that person is not always available.
+- **Language is a barrier.** Most apps assume English and typing. Many people are comfortable in Telugu or Hindi, and with voice.
+- **Scams look official.** Fake bank alerts, bogus government notices and phishing links copy real documents.
+- **Chatbots stop at the answer.** They do not verify senders against official sources, remember deadlines, guide form filling, or hand over to a human.
+
+## Our approach
+
+| Principle | What it means |
+|---|---|
+| **Registry first** | The AI never decides what is "official". A curated registry of official domains, reference formats and helplines does, and every notice is checked against it. |
+| **Notice to action** | Not just an explanation: scan, scam check, explanation, form guide, checklist, reminders, human help. |
+| **Voice and language first** | Telugu, Hindi and English everywhere, with read-aloud and a planned voice guide. |
+| **Prepare only** | Saaradhi never submits a form or a payment for you. |
+| **Honest about doubt** | Scam labels come with reasons and are never a guarantee. Unsure cases go to a human reviewer, with your consent. |
+
+## Features
+
+| Feature | Description | Status |
+|---|---|---|
+| Language selection | Telugu, Hindi, English, changeable anytime | ✅ Working |
+| Sign-in and guest mode | No login for basic help; account for follow-ups | ✅ Working |
+| Connected database | Supabase connected to the app | ✅ Working |
+| Scan and understand | Camera, gallery and PDF input, field extraction with Gemini, confirm-fields screen | 🎨 Designed |
+| Plain-language explanation | What it is, what happens if ignored, what to do, with Read Aloud | 🎨 Designed |
+| Scam check | Safe / Suspicious / Dangerous with reasons, checked against the trusted registry | 🎨 Designed |
+| Form guide | Field-by-field help, document checklist, draft letters (Telugu, Hindi, English), prepare-only | 🎨 Designed |
+| Deadlines and reminders | Countdown dashboard and local reminders at 7, 3 and 1 days and on the due day | 🎨 Designed |
+| Voice guide | Speak in Telugu or Hindi and the app guides you step by step | 🗺️ Planned |
+| Human review | Send a summary to an admin queue, only with consent | 🗺️ Planned |
+
+✅ working in the current prototype · 🎨 screens and specification ready · 🗺️ planned next
+
+## How it works
+
+```mermaid
+flowchart LR
+    A[Photo, PDF or voice] --> B[Extract fields<br/>Gemini 3.8 Flash]
+    B --> C[You confirm the details]
+    C --> D[Scam check<br/>trusted registry]
+    D --> E[Explain in te / hi / en<br/>cited sources]
+    E --> F[Form guide, checklist<br/>and reminders]
+    D -. unsure .-> G[Human review<br/>with your consent]
+    E -. no answer .-> G
 ```
 
-Copy the root `.env.example` to `api/.env` and `app/.env` and fill only what you need.
-Secrets are never committed.
+### Architecture
 
-## Configuration
+```mermaid
+flowchart TB
+    subgraph Client["Tier 1: Android app (Expo)"]
+      C1[Camera, gallery, PDF]
+      C2[Voice in and out]
+      C3[Local storage and reminders]
+    end
+    subgraph API["Tier 2: API (NestJS)"]
+      A1[Notice pipeline services]
+      A2[Job queue]
+    end
+    subgraph AI["Tier 3: AI and knowledge"]
+      I1[Gemini 3.8 Flash]
+      I2[Gemini Live 3.1 + Sarvam AI]
+      I3[Retrieval over verified sources]
+      I4[Trusted registry]
+    end
+    subgraph Data["Tier 4: Data and review (Supabase)"]
+      D1[(Postgres + pgvector)]
+      D2[Auth and private storage]
+      D3[Admin review queue]
+    end
+    Client --> API --> AI
+    API --> Data
+```
 
-| Where | Variable | Purpose |
-|---|---|---|
-| `api/.env` | `GEMINI_API_KEY` | Turns on photo and PDF reading. Without it `/extract` answers 503 for photos and the app tells the user photo reading is off (samples still work). |
-| `api/.env` | `GEMINI_MODEL` | Optional model override. Defaults to `gemini-2.5-flash`. |
-| `api/.env` | `PORT` | Optional. Defaults to `3000`; a value of `0` is ignored. |
-| `app/app.json` | `expo.extra.apiUrl` | API base URL, default `http://localhost:3000`. In Expo Go a `localhost` value is rewritten to the bundler's LAN host automatically, so a phone on the same Wi-Fi reaches the computer without editing this. Set it explicitly for a deployed API. |
+## Privacy and safety
 
-## Extraction (M2)
+- **Consent first.** A consent screen explains what is stored before your first upload.
+- **Guest data stays on your phone** and is deleted automatically after 90 days.
+- **Signed-in data** is kept in the cloud and on the device, protected by row-level security so each user sees only their own records.
+- **Human review only with permission.** A case reaches the admin queue only if you agree to send it.
+- **Prepare only.** Saaradhi never submits forms or payments.
+- **Not legal advice.** Saaradhi helps you understand documents and prepare action. It does not replace a lawyer or an official.
+- **Privacy approach** follows the principles of India's Digital Personal Data Protection Act, 2023 (consent, minimisation, deletion).
 
-The API reads a notice and returns fields only — never OCR text, so notice contents do not sit in logs
-or responses beyond the fields the user is about to confirm.
+## Tech stack
 
-| Endpoint | Purpose |
+| Layer | Technology |
 |---|---|
-| `GET /extract/status` | Whether a Gemini key is configured, plus the sample ids. |
-| `GET /extract/demo` | All sample extractions. |
-| `POST /extract/demo/:id` | One sample (`bill`, `health`, `scam`). |
-| `POST /extract` | `{fileName, mimeType, dataBase64}` -> `ExtractionResult`. Photos/PDF need `GEMINI_API_KEY`; `text/plain` is read offline. |
+| Mobile app | Expo (React Native), TypeScript |
+| Backend API | NestJS |
+| Database, auth, storage | Supabase (Postgres, pgvector, Auth, Storage, Row-Level Security) |
+| Vision and language AI | Gemini 3.8 Flash |
+| Voice AI | Gemini Live 3.1, Sarvam AI (Telugu and Hindi) |
+| Reminders | expo-notifications (scheduled on the device) |
+| Future channels | WhatsApp, Telegram (via Twilio and bots) |
 
-In the app: Home -> photo/gallery/PDF (or "See a sample notice") -> reading screen -> Confirm screen where
-the user fixes anything wrong -> saved to AsyncStorage (`saaradhi.notices.v1`, pruned after 90 days).
-Nothing is submitted anywhere.
+## Roadmap
 
-### Accuracy (honest numbers)
+- [x] Language selection (Telugu, Hindi, English)
+- [x] Sign-in and guest mode
+- [x] Supabase connected
+- [ ] Scan, extraction and confirm-fields flow
+- [ ] Trusted registry and scam labels
+- [ ] Cited explanations from a verified knowledge base
+- [ ] Form guide, document checklist and draft letters
+- [ ] Local deadline reminders
+- [ ] Voice-controlled step-by-step guidance in Telugu and Hindi
+- [ ] Admin review page
+- [ ] WhatsApp and Telegram channels
+- [ ] Family guardian alerts (with consent)
+- [ ] More Indian languages
 
-`npm run accuracy` in `api/` compares expected vs extracted, field by field:
+## Run it yourself
 
-- **45/45 field checks match across 5 synthetic notices** in `/data/notices/samples` (0 mismatches).
-- Those samples are **plain-text files**, so the number measures the deterministic text parser only.
-- **Gemini photo/PDF accuracy is unmeasured:** there are no sample notice photos in the repo and no API
-  key was available. Do not quote the 45/45 as photo-reading accuracy.
-- Missing from the metric so far: real Telugu/Hindi notice photos, PDFs, and any device run.
+You need Node.js, the Expo Go app on an Android phone, and a Supabase project.
 
-## Scam checking (M3)
+```bash
+git clone https://github.com/aharon-kumar-kosetti/saaradhi.git
+cd saaradhi
 
-`POST /scam/check` takes the fields the user confirmed plus the extraction warnings, and returns a label
-(`safe | suspicious | dangerous | unsure`), a score and **machine reason codes**. `GET /scam/status`
-reports how many registry departments exist and how many a human has verified — currently **3 and 0**.
+# install and start the app
+cd app
+npm install
+cp .env.example .env     # add your Supabase URL and anon key
+npx expo start           # scan the QR code with Expo Go
+```
 
-| Signal | Points |
+Environment variables (see `.env.example`; never commit real keys):
+
+```
+EXPO_PUBLIC_SUPABASE_URL=
+EXPO_PUBLIC_SUPABASE_ANON_KEY=
+```
+
+## Repository layout
+
+```
+saaradhi/
+├── app/         Expo (React Native) Android app
+├── api/         NestJS API (pipeline services)
+├── supabase/    Database schema and policies
+├── data/        Trusted registry, glossary and test notices
+├── kb/          Verified source documents for the knowledge base
+└── docs/        PRD, design notes and screenshots
+```
+
+## Testing approach
+
+Saaradhi is tested against a set of 10 real and 10 fake notices, measuring field-extraction accuracy, scam-label accuracy, time from photo to understanding, and native-speaker review of Telugu and Hindi explanations. The interface has also been shown to elderly users, who found the screens and the Telugu and Hindi text easy to understand. Measured results will be added here as the AI flow comes online.
+
+## Team
+
+Built for **HackWithAditya 2026** (theme: *AI for Bharat*) by students of SRKR Engineering College.
+
+| Role | Name |
 |---|---|
-| Domain looks like an official one | 50 |
-| Link is a raw IP address | 40 |
-| Link is shortened (bit.ly and friends) | 40 |
-| Domain ends in `.xyz .top .click .icu .buzz .rest` | 30 |
-| Urgent or threatening language | 25 |
-| QR code shown with a payment request | 25 |
-| Reference number does not fit the department format | 25 |
-| Unknown domain | 15 |
-| Plain `http`, not `https` | 10 |
+| Team Lead | Yirri Bhanu Naga Prakash |
+| Member | Katreddi Bhanu Teja Sri |
+| Member | Reddy Venkata Saketh |
+| Member | Jogi Abishai |
+| Member | Guddeti Dathri Sri Sai Anvitha |
+| Member | Kosetti Aharon Kumar |
 
-`>= 60` is **dangerous**, `>= 25` is **suspicious**. **`safe` requires a verified registry entry plus an
-official link**, so while every entry is `verified: false` the checker cannot answer `safe` at all: an
-official-looking link comes back `unsure` with "no one has confirmed this department's official website
-yet". That is the rule from `CLAUDE.md`, enforced in code and in tests.
+## Disclaimer
 
-Shortened links are resolved one hop at a time, and **the destination is never fetched**: only the
-shortener is contacted, and only to read its redirect. Reason codes are translated in the app, so the
-API never returns notice text.
+Saaradhi provides document comprehension and action preparation only. It is not legal advice, and it never submits forms or payments on your behalf. Scam labels are based on available signals and are not a guarantee. When in doubt, contact the official helpline listed for the department.
 
-### Results on the fake set
+---
 
-`npm run scam-report` in `api/`:
+<div align="center">
 
-| Notice | Expected | Got | Main signals |
-|---|---|---|---|
-| fake_bill_apspdcl_te | dangerous | **dangerous** | lookalike, `.xyz`, urgency |
-| fake_health_shorturl_en | dangerous | **dangerous** | shortened link, urgency |
-| fake_insurance_hi | dangerous | **dangerous** | shortened link, urgency |
-| fake_ip_payment_te | dangerous | **dangerous** | raw IP, QR payment, urgency |
-| fake_no_link_urgency_hi | suspicious | **suspicious** | urgency, no link to check |
-| fake_property_http_hi | suspicious | **suspicious** | plain http, unknown domain |
-| fake_ration_lookalike_en | dangerous | **dangerous** | buried official domain, `.click`, urgency |
-| fake_tgspdcl_lookalike_te | dangerous | **dangerous** | `.top`, urgency, unknown domain |
-| real_bill_apspdcl_te | unsure | **unsure** | no link to check |
-| real_health_ayushman_hi | unsure | **unsure** | unknown domain |
-| real_property_ghmc_en | unsure | **unsure** | unknown domain |
+**Saaradhi: so no one has to face a notice alone.**
 
-**8/8 fakes labelled correctly, 0/3 real notices wrongly accused, and nothing labelled `safe`.** All 11
-files are synthetic text, so this is the rule engine's accuracy — not photo accuracy.
-
-Known gaps, stated plainly:
-- Lookalike detection can only recognise `apspdcl.in` today, because every other registry domain is still
-  `TODO`. `tgspdcl-power.top` was flagged dangerous on its `.top` ending and threats, not as a lookalike.
-- Shortener expansion needs network access from the API; without it the link is still flagged, with
-  `expansion_failed: true`.
-- QR codes are recognised from notice text (QR + payment words) or from Gemini's `risk_signals` flag.
-  There is no camera QR scanning.
-- Scores are rule weights, not calibrated probabilities.
-
-## Explanation + knowledge base (M4)
-
-| Endpoint | Purpose |
-|---|---|
-| `GET /explain/status` | corpus size, verified sources, backend in use |
-| `POST /explain` | `{fields, language}` -> advice codes, citations, helpline, `no_answer` |
-| `POST /review` | consent-gated review request; refuses without `consent: true` |
-
-**Retrieval** is hybrid, mirroring `match_kb_chunks` from `supabase/schema.sql`: IDF-weighted lexical
-overlap (0.6) plus cosine over deterministic hashed 768-dim vectors (0.4). Below **0.18** the answer is
-`no_answer` — the service says it does not know instead of stretching a weak match.
-
-**No pgvector yet.** There is no Supabase project or credentials in this repo, so `kb_chunks` is not in
-use; chunks load from `/kb/chunks/*.json` through `kb.store.ts`. Swapping in Supabase means one adapter
-behind the same `Retriever` interface — the ranking code does not change.
-
-**Answers contain no free text.** The API returns a closed set of 10 advice codes plus citations; the app
-translates them (te/hi/en) and reads them aloud. That keeps invented fees, deadlines and penalties
-structurally impossible. Citations carry `last_verified`, and the seeded corpus is `placeholder: true`
-with `last_verified: null`, so every answer is labelled "not checked against an official source yet".
-
-**No answer path:** when retrieval is weak, the screen says so, shows the helpline, and offers
-"Ask a person to check this". The registry ships `helpline: "TODO"`, so until you fill those in the app
-says no number is recorded rather than inventing one. The request sends department, category and notice
-type only — never the notice or the user's details — and is written to `api/.data/review-queue.json`
-(gitignored). That is a stand-in for the Supabase `review_queue` table, not the real queue.
-
-**Read aloud** uses `expo-speech` with `te-IN` / `hi-IN` / `en-IN`. There is no Sarvam integration yet,
-and a phone without a Telugu or Hindi TTS voice will not speak those languages.
-
-## Form guide, checklist and reminders (M5)
-
-Open a saved notice -> **What to fill and bring** (`/guide/[id]`). Everything on that screen is
-preparation only: Saaradhi never fills, sends or pays anything.
-
-- **Field-by-field guidance** explains how to read and write each detail ("copy the office name exactly
-  as printed"). It deliberately states no fee, deadline or penalty — those come only from a cited KB chunk.
-- **Document checklist** starts from the notice's `required_documents`, then the user ticks, adds their own
-  item, or removes one. It is stored on the notice, so it survives a reload and the 90-day prune.
-- **Local reminders** at T-7, T-3, T-1 and the due day, at 09:00 local time, each toggled separately.
-  Turning one off cancels its notification; dates already past are skipped. Expo Go does show locally
-  scheduled notifications on Android (only remote push needs a development build).
-- A refused notification permission is reported on screen; no reminder id is stored, so the app never
-  claims a reminder it does not have.
-- Reminders are cancelled when the notice is deleted and when **Delete my data** runs. Notices without a
-  due date show why no reminder can be set.
-- **Unverified:** no device run yet — delivery after a reboot, the Android 13+ permission prompt and the
-  Telugu/Hindi speech output have not been observed on hardware.
-
-## README outline (fill as you build)
-1. Pitch (one paragraph) + demo GIF/video
-2. Problem
-3. Screenshots (put images in `/docs/screens`)
-4. Features
-5. How it works (architecture diagram)
-6. Tech stack
-7. Setup (app, API, Supabase, env vars)
-8. Test set & accuracy results
-9. Safety, privacy, limitations
-10. Roadmap
-11. Disclaimer: Document comprehension, not legal advice.
+</div>

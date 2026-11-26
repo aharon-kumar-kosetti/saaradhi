@@ -12,7 +12,10 @@ async function bootstrap() {
   const configuredPort = Number.parseInt(process.env.PORT ?? '', 10);
   const port = Number.isInteger(configuredPort) && configuredPort > 0 ? configuredPort : 3000;
 
-  await app.listen(port, '127.0.0.1');
+  // Loopback by default. Set HOST=0.0.0.0 to let a phone on the same Wi-Fi reach the API.
+  const host = (process.env.HOST ?? '').trim() || '127.0.0.1';
+
+  await app.listen(port, host);
 }
 
 await bootstrap();
