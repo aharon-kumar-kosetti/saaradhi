@@ -15,7 +15,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { PrimaryButton } from '@/components/primary-button';
 import { Colors, Radius, Spacing, Type } from '@/constants/tokens';
-import { authErrorKey } from '@/lib/auth-errors';
+import { authErrorKey, isNotConfiguredError } from '@/lib/auth-errors';
 import { COUNTRIES, DEFAULT_COUNTRY, digitsOnly, toE164, type Country } from '@/lib/countries';
 import type { TKey } from '@/i18n/translations';
 import { requireSupabase } from '@/lib/supabase';
@@ -50,8 +50,8 @@ export default function PhoneScreen() {
         return;
       }
       router.push({ pathname: '/otp', params: { phone: e164 } });
-    } catch {
-      setError('error.network');
+    } catch (error) {
+      setError(isNotConfiguredError(error) ? 'auth.notConfigured' : 'error.network');
     } finally {
       setSending(false);
     }
@@ -138,7 +138,7 @@ export default function PhoneScreen() {
               <Text style={styles.modalTitle}>{t('phone.country')}</Text>
               <Pressable
                 accessibilityRole="button"
-                accessibilityLabel={t('common.back')}
+                accessibilityLabel={t('common.close')}
                 onPress={() => setPicking(false)}
                 style={styles.modalClose}
               >

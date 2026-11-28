@@ -17,7 +17,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { PrimaryButton } from '@/components/primary-button';
 import { Colors, Radius, Spacing, Type } from '@/constants/tokens';
 import type { TKey } from '@/i18n/translations';
-import { authErrorKey } from '@/lib/auth-errors';
+import { authErrorKey, isNotConfiguredError } from '@/lib/auth-errors';
 import { digitsOnly, maskPhone } from '@/lib/countries';
 import { requireSupabase } from '@/lib/supabase';
 import { useSettings } from '@/lib/settings-context';
@@ -72,8 +72,8 @@ export default function OtpScreen() {
         // Spoken rather than shown, because this screen is replaced straight away.
         AccessibilityInfo.announceForAccessibility(t('auth.success'));
         router.replace('/home');
-      } catch {
-        setError('error.network');
+      } catch (error) {
+        setError(isNotConfiguredError(error) ? 'auth.notConfigured' : 'error.network');
       } finally {
         inFlight.current = false;
         setVerifying(false);
@@ -107,8 +107,8 @@ export default function OtpScreen() {
       setNotice('otp.resent');
       setSecondsLeft(RESEND_SECONDS);
       setCode('');
-    } catch {
-      setError('error.network');
+    } catch (error) {
+      setError(isNotConfiguredError(error) ? 'auth.notConfigured' : 'error.network');
     } finally {
       setResending(false);
     }

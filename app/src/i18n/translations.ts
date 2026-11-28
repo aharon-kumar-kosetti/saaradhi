@@ -4,6 +4,7 @@ import type { Language, ScamLabel } from '@/types/notice';
 const en = {
   'app.name': 'Saaradhi',
   'common.back': 'Back',
+  'common.close': 'Close',
   'common.settings': 'Settings',
 
   'auth.title': 'Sign in to Saaradhi',
@@ -19,6 +20,7 @@ const en = {
     'Google sign-in needs the Saaradhi development build. Use your phone number or continue as a guest.',
   'auth.googleFailed': 'Google sign-in could not be completed. Please try again.',
   'auth.googleCancelled': 'Google sign-in was cancelled.',
+  'auth.smsOff': 'SMS codes cannot be sent right now. Use Google, or continue as a guest.',
   'auth.success': 'Signed in. Welcome to Saaradhi.',
 
   'phone.title': 'Your phone number',
@@ -253,6 +255,7 @@ export type TKey = keyof typeof en;
 const te: Record<TKey, string> = {
   'app.name': 'సారథి',
   'common.back': 'వెనుకకు',
+  'common.close': 'మూసివేయండి',
   'common.settings': 'సెట్టింగ్‌లు',
 
   'auth.title': 'సారథిలోకి సైన్ ఇన్ చేయండి',
@@ -268,6 +271,7 @@ const te: Record<TKey, string> = {
     'Google సైన్-ఇన్ కోసం సారథి డెవలప్‌మెంట్ బిల్డ్ కావాలి. ఫోన్ నంబర్ వాడండి లేదా అతిథిగా కొనసాగండి.',
   'auth.googleFailed': 'Google సైన్-ఇన్ పూర్తి కాలేదు. మళ్లీ ప్రయత్నించండి.',
   'auth.googleCancelled': 'Google సైన్-ఇన్ రద్దు అయింది.',
+  'auth.smsOff': 'ఇప్పుడు SMS కోడ్‌లు పంపలేము. Google వాడండి లేదా అతిథిగా కొనసాగండి.',
   'auth.success': 'సైన్ ఇన్ అయింది. సారథికి స్వాగతం.',
 
   'phone.title': 'మీ ఫోన్ నంబర్',
@@ -499,6 +503,7 @@ const te: Record<TKey, string> = {
 const hi: Record<TKey, string> = {
   'app.name': 'सारथी',
   'common.back': 'वापस',
+  'common.close': 'बंद करें',
   'common.settings': 'सेटिंग्स',
 
   'auth.title': 'सारथी में साइन इन करें',
@@ -514,6 +519,7 @@ const hi: Record<TKey, string> = {
     'Google साइन-इन के लिए सारथी का डेवलपमेंट बिल्ड चाहिए। फ़ोन नंबर इस्तेमाल करें या मेहमान के रूप में जारी रखें।',
   'auth.googleFailed': 'Google साइन-इन पूरा नहीं हो सका। कृपया फिर कोशिश करें।',
   'auth.googleCancelled': 'Google साइन-इन रद्द हो गया।',
+  'auth.smsOff': 'अभी SMS कोड नहीं भेज सकते। Google इस्तेमाल करें या मेहमान के रूप में जारी रखें।',
   'auth.success': 'साइन इन हो गया। सारथी में स्वागत है।',
 
   'phone.title': 'आपका फ़ोन नंबर',

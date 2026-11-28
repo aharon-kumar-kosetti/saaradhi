@@ -33,6 +33,11 @@ export default function SignInScreen() {
   const continueWithGoogle = async () => {
     if (googleBusy) return;
     setError(null);
+    // Say why instead of leaving a dead-looking button when the build has no Supabase keys.
+    if (!configured) {
+      setError('auth.notConfigured');
+      return;
+    }
     setGoogleBusy(true);
     try {
       const result = await signInWithGoogle();
@@ -48,6 +53,15 @@ export default function SignInScreen() {
     } finally {
       setGoogleBusy(false);
     }
+  };
+
+  const openPhone = () => {
+    setError(null);
+    if (!configured) {
+      setError('auth.notConfigured');
+      return;
+    }
+    router.push('/phone');
   };
 
   const continueAsGuest = async () => {
@@ -71,12 +85,12 @@ export default function SignInScreen() {
           <Pressable
             accessibilityRole="button"
             accessibilityLabel={t('auth.google')}
-            accessibilityState={{ disabled: googleBusy || !configured }}
-            disabled={googleBusy || !configured}
+            accessibilityState={{ disabled: googleBusy }}
+            disabled={googleBusy}
             onPress={() => void continueWithGoogle()}
             style={({ pressed }) => [
               styles.googleButton,
-              (googleBusy || !configured) && styles.disabled,
+              googleBusy && styles.disabled,
               pressed && styles.pressed,
             ]}
           >
@@ -90,12 +104,7 @@ export default function SignInScreen() {
             )}
           </Pressable>
 
-          <PrimaryButton
-            label={t('auth.phone')}
-            icon="call-outline"
-            disabled={!configured}
-            onPress={() => router.push('/phone')}
-          />
+          <PrimaryButton label={t('auth.phone')} icon="call-outline" onPress={openPhone} />
 
           {!configured ? <Text style={styles.hint}>{t('auth.notConfigured')}</Text> : null}
 
