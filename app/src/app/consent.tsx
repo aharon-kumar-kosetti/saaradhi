@@ -5,6 +5,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { PrimaryButton } from '@/components/primary-button';
 import { Colors, Spacing, Type } from '@/constants/tokens';
+import { useEntryRoute } from '@/lib/auth-context';
 import { useSettings } from '@/lib/settings-context';
 import type { TKey } from '@/i18n/translations';
 
@@ -12,10 +13,12 @@ const POINTS: TKey[] = ['consent.point1', 'consent.point2', 'consent.point3'];
 
 export default function ConsentScreen() {
   const { acceptConsent, t } = useSettings();
+  // Guests and signed-in users go straight in; a first-time user meets the sign-in options.
+  const entryRoute = useEntryRoute();
 
   const agree = async () => {
     await acceptConsent();
-    router.replace('/home');
+    router.replace(entryRoute);
   };
 
   return (
@@ -42,7 +45,7 @@ export default function ConsentScreen() {
             label={t('consent.later')}
             icon="arrow-forward"
             variant="secondary"
-            onPress={() => router.replace('/home')}
+            onPress={() => router.replace(entryRoute)}
           />
         </View>
       </ScrollView>

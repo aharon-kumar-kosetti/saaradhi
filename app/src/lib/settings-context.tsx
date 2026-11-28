@@ -27,6 +27,7 @@ interface SettingsContextValue {
   setLanguage: (language: Language) => Promise<void>;
   acceptConsent: () => Promise<void>;
   deleteAllData: () => Promise<void>;
+  setGuestMode: (guest: boolean) => Promise<void>;
 }
 
 const SettingsContext = createContext<SettingsContextValue | null>(null);
@@ -74,6 +75,16 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
     setSettings(DEFAULT_SETTINGS);
   }, []);
 
+  // Only the flag is stored: guest notices stay where they already are, so signing in later
+  // neither loses them nor uploads them.
+  const setGuestMode = useCallback(async (guest: boolean) => {
+    setSettings((current) => {
+      const updated: Settings = { ...current, guestMode: guest };
+      void saveSettings(updated);
+      return updated;
+    });
+  }, []);
+
   const value = useMemo<SettingsContextValue>(
     () => ({
       settings,
@@ -83,8 +94,9 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
       setLanguage,
       acceptConsent,
       deleteAllData,
+      setGuestMode,
     }),
-    [settings, loading, language, setLanguage, acceptConsent, deleteAllData],
+    [settings, loading, language, setLanguage, acceptConsent, deleteAllData, setGuestMode],
   );
 
   return <SettingsContext.Provider value={value}>{children}</SettingsContext.Provider>;

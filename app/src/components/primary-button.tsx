@@ -9,10 +9,18 @@ interface Props {
   onPress: () => void;
   variant?: 'primary' | 'secondary';
   accessibilityHint?: string;
+  disabled?: boolean;
 }
 
 /** One big tappable action. Icons always paired with a label. */
-export function PrimaryButton({ label, icon, onPress, variant = 'primary', accessibilityHint }: Props) {
+export function PrimaryButton({
+  label,
+  icon,
+  onPress,
+  variant = 'primary',
+  accessibilityHint,
+  disabled = false,
+}: Props) {
   const isPrimary = variant === 'primary';
   const tint = isPrimary ? Colors.background : Colors.primary;
 
@@ -21,10 +29,13 @@ export function PrimaryButton({ label, icon, onPress, variant = 'primary', acces
       accessibilityRole="button"
       accessibilityLabel={label}
       accessibilityHint={accessibilityHint}
+      accessibilityState={{ disabled }}
+      disabled={disabled}
       onPress={onPress}
       style={({ pressed }) => [
         styles.button,
         isPrimary ? styles.primary : styles.secondary,
+        disabled && styles.disabled,
         pressed && styles.pressed,
       ]}
     >
@@ -54,6 +65,9 @@ const styles = StyleSheet.create({
   },
   pressed: {
     opacity: 0.85,
+  },
+  disabled: {
+    opacity: 0.5,
   },
   content: {
     flexDirection: 'row',

@@ -6,12 +6,30 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Colors, Radius, Spacing, Type } from '@/constants/tokens';
 import { LANGUAGE_NAMES } from '@/i18n/translations';
+import { useAuth } from '@/lib/auth-context';
+import { maskPhone } from '@/lib/countries';
 import { cancelAllReminders } from '@/lib/reminders';
 import { useSettings } from '@/lib/settings-context';
 
 export default function SettingsScreen() {
-  const { t, language, deleteAllData } = useSettings();
+  const { t, language, deleteAllData, setGuestMode } = useSettings();
+  const { session, user, signOut, configured } = useAuth();
   const version = Constants.expoConfig?.version ?? '—';
+
+  const confirmSignOut = () => {
+    Alert.alert(t('settings.signOutTitle'), t('settings.signOutBody'), [
+      { text: t('settings.cancel'), style: 'cancel' },
+      {
+        text: t('settings.signOut'),
+        style: 'destructive',
+        onPress: () => {
+          void signOut()
+            .then(() => setGuestMode(false))
+            .then(() => router.replace('/sign-in'));
+        },
+      },
+    ]);
+  };
 
   const confirmDelete = () => {
     Alert.alert(t('settings.deleteTitle'), t('settings.deleteBody'), [
@@ -54,6 +72,38 @@ export default function SettingsScreen() {
           </View>
           <Ionicons name="chevron-forward" size={22} color={Colors.muted} />
         </Pressable>
+
+        {session ? (
+          <View style={styles.card}>
+            <Text style={styles.cardTitle}>{t('settings.account')}</Text>
+            <Text style={styles.rowValue}>
+              {user?.phone ? maskPhone(user.phone) : (user?.email ?? t('settings.account'))}
+            </Text>
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel={t('settings.signOut')}
+              onPress={confirmSignOut}
+              style={({ pressed }) => [styles.signOut, pressed && styles.pressed]}
+            >
+              <Ionicons name="log-out-outline" size={22} color={Colors.primary} />
+              <Text style={styles.signOutLabel}>{t('settings.signOut')}</Text>
+            </Pressable>
+          </View>
+        ) : configured ? (
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel={t('settings.signIn')}
+            onPress={() => router.push('/sign-in')}
+            style={({ pressed }) => [styles.row, pressed && styles.pressed]}
+          >
+            <Ionicons name="person-circle-outline" size={24} color={Colors.primary} />
+            <View style={styles.rowText}>
+              <Text style={styles.rowLabel}>{t('settings.signIn')}</Text>
+              <Text style={styles.rowValue}>{t('settings.guest')}</Text>
+            </View>
+            <Ionicons name="chevron-forward" size={22} color={Colors.muted} />
+          </Pressable>
+        ) : null}
 
         <View style={styles.card}>
           <Text style={styles.cardTitle}>{t('settings.privacy')}</Text>
@@ -147,6 +197,17 @@ const styles = StyleSheet.create({
     fontSize: Type.small,
     lineHeight: 22,
     color: Colors.text,
+  },
+  signOut: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.sm,
+    minHeight: Type.touchTarget,
+  },
+  signOutLabel: {
+    fontSize: Type.body,
+    fontWeight: '700',
+    color: Colors.primary,
   },
   danger: {
     backgroundColor: '#FDECEA',

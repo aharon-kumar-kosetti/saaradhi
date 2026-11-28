@@ -4,6 +4,7 @@ import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Colors, Radius, Spacing, Type } from '@/constants/tokens';
+import { useEntryRoute } from '@/lib/auth-context';
 import { useSettings } from '@/lib/settings-context';
 import { CURRENT_CONSENT_VERSION } from '@/lib/storage';
 import type { Language } from '@/types/notice';
@@ -16,6 +17,7 @@ const OPTIONS: { code: Language; native: string; english: string }[] = [
 
 export default function LanguageScreen() {
   const { language, setLanguage, settings, t } = useSettings();
+  const entryRoute = useEntryRoute();
   const { next } = useLocalSearchParams<{ next?: string }>();
 
   const choose = async (code: Language) => {
@@ -25,7 +27,7 @@ export default function LanguageScreen() {
       router.back();
       return;
     }
-    router.replace(settings.consentVersion >= CURRENT_CONSENT_VERSION ? '/home' : '/consent');
+    router.replace(settings.consentVersion >= CURRENT_CONSENT_VERSION ? entryRoute : '/consent');
   };
 
   return (
